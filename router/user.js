@@ -8,8 +8,19 @@ var ObjectId = Schema.ObjectId;
 var UserSchema = new Schema({
     username: String,
     password: String,
-    taskList : [ObjectId]
+    taskList : [{type : ObjectId, ref: "List"}]
 });
+
+UserSchema.methods.hasList = function (name, cb) {
+  'use strict';
+  this.populate('taskList')
+    .exec(function (err, list) {
+      var nameList = _.pluck(list, 'name');
+      if (err) cb(err);
+      else if(_.contains(nameList,name)) cb(null,true);
+      else cb(null, false);
+    })
+};
 
 var User = mongoose.model('User', UserSchema);
 

@@ -3,7 +3,8 @@ var express = require('express')
     , util = require('util'),
     mongoose = require('mongoose'),
     passport = require('passport'),
-    user = require('./router/user.js');
+    user = require('./router/user.js'),
+  list = require('./router/list.js');
 
 mongoose.connect('mongodb://localhost:27017/test');
 user.localAuth(passport);
@@ -74,6 +75,12 @@ app.post('/register', function (req, res) {
         }
     });
 })
+
+app.post('/list', ensureAuthenticated, list.create);
+
+app.get('/list', ensureAuthenticated, list.showAll);
+
+app.get('/list/:id', ensureAuthenticated, list.show);
 
 app.listen(3000);
 
