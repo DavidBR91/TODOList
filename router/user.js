@@ -19,7 +19,7 @@ UserSchema.methods.hasList = function (name, cb) {
       if (err) cb(err);
       else if(_.contains(nameList,name)) cb(null,true);
       else cb(null, false);
-    })
+    });
 };
 
 var User = mongoose.model('User', UserSchema);

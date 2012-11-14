@@ -5,9 +5,9 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var TaskSchema = new Schema({
-    username: String,
-    password: String,
-    taskList : [ObjectId]
+    name: String,
+    date: Date,
+    completed : Boolean
 });
 
 var TaskSchema = mongoose.model('Task', TaskSchema);
