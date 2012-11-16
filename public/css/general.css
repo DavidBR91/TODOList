@@ -1,0 +1,14 @@
+html, body {
+  width:  100%;
+  margin: 0px;
+}
+.padding0{
+	padding: 0;
+}
+.listsMenu .tasksList .taskFields{
+	margin-top:50px;
+	margin-bottom:50px;
+	height: 100%;
+	min-height: 100%;
+	display: block;
+}
