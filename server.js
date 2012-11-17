@@ -4,7 +4,8 @@ var express = require('express')
     mongoose = require('mongoose'),
     passport = require('passport'),
     user = require('./router/user.js'),
-  list = require('./router/list.js');
+    list = require('./router/list.js'),
+    task = require('./router/task.js');
 
 mongoose.connect('mongodb://localhost:27017/test');
 user.localAuth(passport);
@@ -80,7 +81,13 @@ app.post('/list', ensureAuthenticated, list.create);
 
 app.get('/list', ensureAuthenticated, list.showAll);
 
-app.get('/list/:id', ensureAuthenticated, list.show);
+app.get('/list/:listid', ensureAuthenticated, list.show);
+
+app.post('/list/:listid/task', ensureAuthenticated, task.create);
+
+app.get('/list/:listid/task', ensureAuthenticated, task.showAll);
+
+app.get('/list/:listid/task/:taskid', ensureAuthenticated, task.show)
 
 app.listen(3000);
 

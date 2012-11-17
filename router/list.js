@@ -6,8 +6,9 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var ListSchema = new Schema({
+    user : ObjectId,
     name: String,
-    tasks: [ObjectId]
+    tasks: [{type : ObjectId, ref: "Task"}]
 });
 
 var List = mongoose.model('List', ListSchema);
@@ -22,9 +23,10 @@ exports.create = function (req, res) {
                 console.log(err);
             } else if (!(_.contains(nameList, name))) {
                 var list = new List(_.pick(req.body, 'name'));
+                list.user = req.user;
                 list.save(function (err, list) {
                     if (!err) {
-                        loc = req.headers.host + '/list/' + list.name;
+                        loc = req.headers.host + '/list/' + list.id;
                         res.setHeader('Location', loc);
                         res.json(list, 201);
                         saveInUser(user, list);
@@ -42,10 +44,6 @@ exports.create = function (req, res) {
         });
     function saveInUser(cuser, list) {
         console.log(cuser);
-        /*user.User.findByIdAndUpdate(cuser.id, {taskList: cuser.taskList.push(list.id)}, function (err, user) {
-         console.log(user);
-         console.log(err);
-         });*/
         user.User.update({_id: cuser.id}, {$push: {taskList: list._id}}, function (err) {
             if (err) {
                 console.log(err);
@@ -58,12 +56,12 @@ exports.create = function (req, res) {
 
 exports.showAll = function (req, res) {
     List.find(function (err, lists) {
-        res.send(lists);
+        res.json(lists);
     });
 };
 
 exports.show = function (req, res) {
-    Disco.findOne({name: req.params.id}, function (error, list) {
+    List.findById(req.params.listid, function (error, list) {
         res.json(list);
     });
 };
