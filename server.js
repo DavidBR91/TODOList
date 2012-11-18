@@ -31,6 +31,7 @@ app.configure(function () {
     app.use(express.static(__dirname + '/public'));
 });
 
+var desiredURL;
 
 app.get('/', function (req, res) {
     res.redirect('/index');
@@ -45,7 +46,12 @@ app.get('/login', function (req, res) {
 app.post('/login',
     passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }),
     function (req, res) {
+        if(!desiredURL || desiredURL === '/login'){
         res.redirect('/');
+        } else {
+           console.log(desiredURL);
+          res.redirect(desiredURL);
+        }
     });
 
 app.get('/logout', function (req, res) {
@@ -77,6 +83,8 @@ app.post('/register', function (req, res) {
     });
 })
 
+app.get ('/user', ensureAuthenticated, user.getAll);
+
 app.post('/list', ensureAuthenticated, list.create);
 
 app.get('/list', ensureAuthenticated, list.showAll);
@@ -87,13 +95,15 @@ app.post('/list/:listid/task', ensureAuthenticated, task.create);
 
 app.get('/list/:listid/task', ensureAuthenticated, task.showAll);
 
-app.get('/list/:listid/task/:taskid', ensureAuthenticated, task.show)
+app.get('/list/:listid/task/:taskid', ensureAuthenticated, task.show);
 
 app.listen(3000);
 
 function ensureAuthenticated(req, res, next) {
+    desiredURL = req.path;
     if (req.isAuthenticated()) {
         return next();
-    }
+    }else{
     res.redirect('/login');
-}
+    }
+};

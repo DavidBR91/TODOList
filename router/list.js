@@ -55,14 +55,38 @@ exports.create = function (req, res) {
 };
 
 exports.showAll = function (req, res) {
-    List.find(function (err, lists) {
-        res.json(lists);
-    });
+    user.User.findById(req.user.id).populate('taskList')
+      .exec(function(err, user){
+        if(err){
+          res.json({ok:false, error : err}, 500);
+        } else {
+          if(!user){
+            res.json({ok : true, data : null}, 200);
+          } else {
+            res.json({ok : true, data : user.taskList}, 200);
+          }
+        }
+      });
 };
 
 exports.show = function (req, res) {
     List.findById(req.params.listid, function (error, list) {
-        res.json(list);
+      if (error){
+        res.json({ok:false, error : error});
+      }
+      else{
+        if(!list){
+          res.json({ok : true, data : null}, 200);
+        }
+        else if (list.user.toString() === req.user.id){
+
+          res.json({ok : true, data : list}, 200);
+        }
+        else{
+          console.log(list.user);
+          res.json({ok:false, error : "Not authorized"}, 401);
+        }
+      };
     });
 };
 

@@ -6,8 +6,13 @@ var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
 var UserSchema = new Schema({
-    username: String,
-    password: String,
+    username: {type : String, required : true},
+    password: {type : String, required : true},
+    name : {type : String, required : true},
+    surname : {type : String, required : true},
+    email : {type : String, required : true},
+    country : {type : String, required : true},
+    city : {type : String, required : true},
     taskList : [{type : ObjectId, ref: "List"}]
 });
 
@@ -64,7 +69,7 @@ exports.getAll = function (req, res) {
 exports.register = function (req, done) {
 
     process.nextTick(function () {
-        var userData = _.pick(req.body, 'username', 'password');
+        var userData = _.pick(req.body, 'username', 'password','name','surname','email','country','city');
         User.findOne({username: userData.username}, function (err, user) {
             console.log(user);
             if (err) {
