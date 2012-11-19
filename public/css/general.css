@@ -1,14 +1,63 @@
 html, body {
-  width:  100%;
+  width:  auto;
   margin: 0px;
+}
+body {
+	padding-top: 60px;
+	margin-left: 30px;
+	margin-right: 30px;
 }
 .padding0{
 	padding: 0;
 }
-.listsMenu .tasksList .taskFields{
+.todoLists .tasksList{
 	margin-top:50px;
 	margin-bottom:50px;
 	height: 100%;
 	min-height: 100%;
 	display: block;
+}
+.todoLists{
+	position: fixed;
+	width: 20%;
+	padding: 10px;
+}
+.tasksList{
+	font-size: small;
+}
+.taskListTitle{
+	background-color: white;
+	text-align: center;
+	background-color: #83c8f9;
+	color: white;
+	border-bottom: 2px solid gray;
+}
+.task{
+	-webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+	text-align: center;
+	vertical-align: middle;
+	height: auto;
+	padding: 10px;
+	background-color: #83c8f9;
+	color: white;
+	border: 1px solid black;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-moz-box-shadow:    3px 3px 3px 3px #ccc;
+    -webkit-box-shadow: 3px 3px 3px 3px #ccc;
+    box-shadow:         3px 3px 3px 3px #ccc;
+}
+.task:hover{
+	text-decoration: none;
+	color: white;
+	background-color: #608dee;
+	-moz-box-shadow:    3px 3px 3px 3px #83c8f9;
+    -webkit-box-shadow: 3px 3px 3px 3px #83c8f9;
+    box-shadow:         3px 3px 3px 3px #83c8f9;
+}
+.taskRow{
+	margin-bottom: 30px;
+	height: auto;
 }
