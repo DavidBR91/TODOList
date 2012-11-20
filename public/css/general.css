@@ -13,17 +13,11 @@ body {
 .todoLists .tasksList{
 	margin-top:50px;
 	margin-bottom:50px;
-	height: 100%;
-	min-height: 100%;
-	display: block;
 }
 .todoLists{
 	position: fixed;
 	width: 20%;
 	padding: 10px;
-}
-.tasksList{
-	font-size: small;
 }
 .taskListTitle{
 	background-color: white;
