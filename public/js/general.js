@@ -46,7 +46,8 @@ var Task=Backbone.Model.extend({
 var TaskList=Backbone.Collection.extend({
 	model: Task,
 	comparator: function(task) {
-		return [task.get("limitYear"),task.get("limitMonth"),task.get("limitDay")]
+		var date=new Date(task.get("limitYear"),task.get("limitMonth"),task.get("limitDay"),0,0,0,0);
+		return date.getTime();
 	}
 });
 var ListsView=Backbone.View.extend({
