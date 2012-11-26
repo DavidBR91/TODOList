@@ -64,10 +64,10 @@
 	    				</div>
 	    				<div class="control-group">
 		    				<label class="control-label" for="inputLimitDate">Fecha Límite</label>
-		    				<div class="controls inputLimitDate">
-			    				<input type="text" class="span2" id="inputLimitDay" placeholder="00">
-			    				<input type="text" class="span2" id="inputLimitMonth" placeholder="00">
-			    				<input type="text" class="span2" id="inputLimitYear" placeholder="00">
+		    				<div class="controls">
+			    				<input type="text" class="span2" id="inputLimitDay" placeholder="0" size="1" maxlength="2" max="31">
+			    				<input type="text" class="span2" id="inputLimitMonth" placeholder="0" size="1" maxlength="2" max="12">
+			    				<input type="text" class="span2" id="inputLimitYear" placeholder="0" size="1" maxlength="2">
 			    				(0/0/0=sin fecha limite)
 			    			</div>
 	    				</div>
@@ -78,22 +78,28 @@
 			    				dias (0=sin dias esperados)
 						    </div>
 	    				</div>
+	    				<div class="control-group">
+		    				<label class="control-label" for="completedInput">Completado</label>
+		    				<div class="controls">
+			    				<input type="checkbox" id="completedInput">
+						    </div>
+	    				</div>
     				</form>
   				</div>
   				<div class="modal-footer">
-  				   	<button class="btn btn-danger pull-left" id="removeButton">Borrar Tarea</button>
-    				<button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
-    				<button class="btn btn-primary" id="submitButton">Guardar cambios</button>
+  				   	<a class="btn btn-danger pull-left" id="removeButton">Borrar Tarea</a>
+    				<a class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</a>
+    				<a class="btn btn-primary" id="submitButton">Guardar cambios</a>
   				</div>
 			</div>
 			<!-- Modal -->
 			<div id="newList" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="newList" aria-hidden="true">
   				<div class="modal-header">
     				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    				<h3 id="newListTitle">Titulo</h3>
+    				<h3 id="newListTitle">Introduzca el nombre de la nueva lista</h3>
   				</div>
   				<div class="modal-body">
-    				<form class="taskOptionsForm form-horizontal">
+    				<form class="newListForm form-horizontal">
 	    				<div class="control-group">
 		    				<label class="control-label" for="inputName">Nombre</label>
 		    				<div class="controls">
@@ -107,6 +113,27 @@
     				<button class="btn btn-primary" id="submitNewListButton">Guardar</button>
   				</div>
 			</div>
+			<!-- Modal -->
+			<div id="newTaskModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="newTaskModal" aria-hidden="true">
+  				<div class="modal-header">
+    				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    				<h3 id="newTaskTitle">Indroduzca el nombre de nueva tarea</h3>
+  				</div>
+  				<div class="modal-body">
+    				<form class="newTaskForm form-horizontal">
+	    				<div class="control-group">
+		    				<label class="control-label" for="inputTaskName">Nombre</label>
+		    				<div class="controls">
+			    				<input type="text" id="inputTaskName" placeholder="Nombre">
+						    </div>
+	    				</div>
+    				</form>
+  				</div>
+  				<div class="modal-footer">
+    				<button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+    				<button class="btn btn-primary" id="submitNewTaskButton">Guardar</button>
+  				</div>
+			</div>
 		</div>
 		
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -116,7 +143,7 @@
     	<script type="text/template" id="taskRowTemplate">
 	    	<div class="row-fluid taskRow">
 	    	    <% _.each(tasks, function(task) { %>
-				<a href="#taskOptions" role="button" class="span3 task" data-toggle="modal">
+				<a href="#taskOptions" role="button" data-name=<%= task.name %> class="span3 task" data-toggle="modal">
 					<h3><%= task.name %></h3>
 					<h4><%= task.limitDate %></h4>
 				</a>
@@ -138,7 +165,7 @@
 			</div>
 			<div class="listsAddDelete">
 				<button href="#newList" class="span6 btn btn-primary" data-toggle="modal">Nueva lista</button>
-				<button class="span6 btn btn-danger">Borrar lista</button>
+				<a id="deleteList" class="span6 btn btn-danger">Borrar lista</a>
 			</div>
     	</script>
     	<script src="js/general.js"></script>
