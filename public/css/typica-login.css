@@ -99,7 +99,7 @@ body {
     -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
     position: absolute;
-    top: 50%;
+    top: 35%;
     left: 50%;
     display: block;
     margin-top: -185px;
