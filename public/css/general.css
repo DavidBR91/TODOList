@@ -1,14 +1,95 @@
 html, body {
-  width:  100%;
+  width:  auto;
   margin: 0px;
+}
+body {
+	margin-left: 30px;
+	margin-right: 30px;
 }
 .padding0{
 	padding: 0;
 }
-.listsMenu .tasksList .taskFields{
+.todoLists .tasksList{
 	margin-top:50px;
 	margin-bottom:50px;
-	height: 100%;
-	min-height: 100%;
-	display: block;
+}
+.todoLists{
+    position: relative;
+    height: 600px;
+    min-width: 200px;
+    padding: 10px;
+}
+.taskListTitle{
+	background-color: white;
+	text-align: center;
+	background-color: #83c8f9;
+	color: white;
+	border-bottom: 2px solid gray;
+}
+.task{
+	text-align: center;
+	vertical-align: middle;
+	height: 70px;
+	padding: 10px;
+    color: white;
+
+}
+.task:hover{
+	text-decoration: none;
+	border-style: solid
+}
+
+.incompleted{
+    background: -moz-radial-gradient(center, ellipse cover,  rgba(136,191,232,1) 0%, rgba(112,176,224,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(136,191,232,1)), color-stop(100%,rgba(112,176,224,1))); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#88bfe8', endColorstr='#70b0e0',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+.completed{
+    background: rgb(147,229,135); /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  rgba(147,229,135,1) 0%, rgba(113,188,118,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(147,229,135,1)), color-stop(100%,rgba(113,188,118,1))); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  rgba(147,229,135,1) 0%,rgba(113,188,118,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  rgba(147,229,135,1) 0%,rgba(113,188,118,1) 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  rgba(147,229,135,1) 0%,rgba(113,188,118,1) 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center,  rgba(147,229,135,1) 0%,rgba(113,188,118,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#93e587', endColorstr='#71bc76',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+.expired{
+    background: rgb(226,102,102); /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover,  rgba(226,102,102,1) 0%, rgba(186,91,91,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(226,102,102,1)), color-stop(100%,rgba(186,91,91,1))); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover,  rgba(226,102,102,1) 0%,rgba(186,91,91,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover,  rgba(226,102,102,1) 0%,rgba(186,91,91,1) 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover,  rgba(226,102,102,1) 0%,rgba(186,91,91,1) 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center,  rgba(226,102,102,1) 0%,rgba(186,91,91,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e26666', endColorstr='#ba5b5b',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+#newTask{
+    background: url('img/glyphicons_190_circle_plus.png')
+}
+
+.listsLinks {
+    height: 80%;
+    min-height: 240px;
+    overflow-y: scroll;
+    background: #ffffff;
+}
+
+#dropdownLists{
+	width: 100%;
+}
+.listsAddDelete{
+    bottom: 0;
+    padding: 20px;
+}
+
+.shortcutTask{
+    height: 100px;
 }

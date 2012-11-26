@@ -31,26 +31,116 @@
 			</div>
 		</div>
 		<div class="row-fluid">
-			<div class="span3 hero-unit listsMenu">
-				TestAjlkf, jklñanjfdmn jkmvnjdkjfke,m fnjkwec,mnjehvnkm wrjnrekfm njgrfkm kenjkf ewmknjk femkje
+			<div class="span2">
+				<div class="well sidebar-nav todoLists">
+					
+				</div>
 			</div>
-			<div class="span9 hero-unit taskList">
-				TestBTestAjlkf, jklñanjfdmn jkmvnjdkjfke,m fnjkwec,mnjehvnkm wrjnrekfm njgrfkm kenjkf ewmknjk femkje
-				TestAjlkf, jklñanjfdmn jkmvnjdkjfke,m fnjkwec,mnjehvnkm wrjnrekfm njgrfkm kenjkf ewmknjk femkje
-				TestAjlkf, jklñanjfdmn jkmvnjdkjfke,m fnjkwec,mnjehvnkm wrjnrekfm njgrfkm kenjkf ewmknjk femkje
+			<div class="offset1 span9">
+				<div class="span12 page-header padding0 taskListTitle"></div>
+				<div class="span12 taskList">
+				
+				</div>
 			</div>
-			<div class="span3 hero-unit pull-right taskFields">
-				TestAjlkf, jklñanjfdmn jkmvnjdkjfke,m fnjkwec,mnjehvnkm wrjnrekfm njgrfkm kenjkf ewmknjk femkje
-				TestAjlkf, jklñanjfdmn jkmvnjdkjfke,m fnjkwec,mnjehvnkm wrjnrekfm njgrfkm kenjkf ewmknjk femkje
-				TestAjlkf, jklñanjfdmn jkmvnjdkjfke,m fnjkwec,mnjehvnkm wrjnrekfm njgrfkm kenjkf ewmknjk femkje
+			<!-- Modal -->
+			<div id="taskOptions" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="taskOptions" aria-hidden="true">
+  				<div class="modal-header">
+    				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    				<h3 id="taskOptionsLabel">Titulo</h3>
+  				</div>
+  				<div class="modal-body">
+    				<form class="taskOptionsForm form-horizontal">
+	    				<div class="control-group">
+		    				<label class="control-label" for="inputTitle">Título</label>
+		    				<div class="controls">
+			    				<input type="text" id="inputTitle" placeholder="Titulo">
+						    </div>
+	    				</div>
+	    				<div class="control-group">
+		    				<label class="control-label" for="inputDescription">Descripción</label>
+		    				<div class="controls">
+			    				<textarea rows="3" id="inputDescription" placeholder="Descripcion"></textarea>
+			    			</div>
+	    				</div>
+	    				<div class="control-group">
+		    				<label class="control-label" for="inputLimitDate">Fecha Límite</label>
+		    				<div class="controls inputLimitDate">
+			    				<input type="text" class="span2" id="inputLimitDay" placeholder="00">
+			    				<input type="text" class="span2" id="inputLimitMonth" placeholder="00">
+			    				<input type="text" class="span2" id="inputLimitYear" placeholder="00">
+			    				(0/0/0=sin fecha limite)
+			    			</div>
+	    				</div>
+	    				<div class="control-group">
+		    				<label class="control-label" for="inputExpectedDays">Dias esperados</label>
+		    				<div class="controls">
+			    				<input type="text" class="span3" id="inputExpectedDays" placeholder="0">
+			    				dias (0=sin dias esperados)
+						    </div>
+	    				</div>
+    				</form>
+  				</div>
+  				<div class="modal-footer">
+  				   	<button class="btn btn-danger pull-left" id="removeButton">Borrar Tarea</button>
+    				<button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+    				<button class="btn btn-primary" id="submitButton">Guardar cambios</button>
+  				</div>
+			</div>
+			<!-- Modal -->
+			<div id="newList" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="newList" aria-hidden="true">
+  				<div class="modal-header">
+    				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    				<h3 id="newListTitle">Titulo</h3>
+  				</div>
+  				<div class="modal-body">
+    				<form class="taskOptionsForm form-horizontal">
+	    				<div class="control-group">
+		    				<label class="control-label" for="inputName">Nombre</label>
+		    				<div class="controls">
+			    				<input type="text" id="inputName" placeholder="Nombre">
+						    </div>
+	    				</div>
+    				</form>
+  				</div>
+  				<div class="modal-footer">
+    				<button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
+    				<button class="btn btn-primary" id="submitNewListButton">Guardar</button>
+  				</div>
 			</div>
 		</div>
-		<div class="navbar navbar-fixed-bottom">
-			<div class="navbar-inner">
-			
-			</div>
-		</div>
+		
 		<script src="http://code.jquery.com/jquery-latest.js"></script>
 		<script src="js/bootstrap.min.js"></script>
+		<script src="js/underscore-min.js"></script>
+    	<script src="js/backbone-min.js"></script>
+    	<script type="text/template" id="taskRowTemplate">
+	    	<div class="row-fluid taskRow">
+	    	    <% _.each(tasks, function(task) { %>
+				<a href="#taskOptions" role="button" class="span3 task" data-toggle="modal">
+					<h3><%= task.name %></h3>
+					<h4><%= task.limitDate %></h4>
+				</a>
+				<% }); %>
+			</div>
+    	</script>
+    	<script type="text/template" id="listsNavbar">
+	    	<select class="span10" id="dropdownLists">
+        		<% _.each(lists, function(list) { %>
+				<option><%= list.name %></option>
+				<% }); %>
+			</select>
+			<div class="listsLinks">
+				<ul class="nav nav-list">
+					<% _.each(lists, function(list) { %>
+					<li><a class="listElement" href="#"><%= list.name %></a><li>
+					<% }); %>
+				</ul>
+			</div>
+			<div class="listsAddDelete">
+				<button href="#newList" class="span6 btn btn-primary" data-toggle="modal">Nueva lista</button>
+				<button class="span6 btn btn-danger">Borrar lista</button>
+			</div>
+    	</script>
+    	<script src="js/general.js"></script>
 	</body>
 </html>
