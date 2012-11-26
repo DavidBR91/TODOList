@@ -9,13 +9,13 @@
     },
     "dependencies": {
         "express": "3.x.x",
-        "connect-flash": "0.1.x",
+        "connect-flash": "0.1.0",
         "ejs": ">= 0.0.0",
         "ejs-locals": ">= 0.0.0",
-        "passport": ">= 0.0.0",
+        "passport": "*",
         "passport-local": ">= 0.0.0",
         "mongoose" :"3.x.x",
-        "underscore" : "1.4.2"
+        "underscore" : "1.4.2",
     },
     "engines": {
         "node": "*"

@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
 
+
 var ListSchema = new Schema({
     user : ObjectId,
     name: String,
@@ -32,8 +33,7 @@ exports.create = function (req, res) {
                         saveInUser(user, list);
                     }
                     else {
-                        console.log('Error');
-                        res.json({ok: false});
+                        res.json({ok: false, error : err});
                     }
                 });
             }

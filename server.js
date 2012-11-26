@@ -78,7 +78,8 @@ app.post('/register', function (req, res) {
             }
         }
         else {
-            res.send(500);
+          req.flash('error', info.message);
+          res.redirect('/register');
         }
     });
 })

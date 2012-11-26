@@ -99,13 +99,14 @@ body {
     -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
     position: absolute;
-    top: 35%;
+    top: 50%;
     left: 50%;
     display: block;
     margin-top: -185px;
     margin-left: -235px;
     padding: 25px;
     width: 420px;
+    height: 320px;
     background: white;
     text-align: center;
 }
@@ -158,7 +159,7 @@ body {
     -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
     margin-top: 25px;
-    margin-bottom: 70px;
+    margin-bottom: 120px;
     padding-top: 25px;
     padding-bottom: 25px;
     background: white;

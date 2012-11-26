@@ -1,6 +1,5 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <title>TODOlist - Register Form</title>
@@ -21,10 +20,9 @@
 
     <style type="text/css">
 
-        #demoNavigation {
-            margin-top : 0.5em;
-            margin-right : 1em;
-            text-align: right;
+        #demoForm {
+            margin: 0 auto;
+            width: 60%;
         }
     </style>
 
@@ -32,58 +30,58 @@
 
 <body>
 
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span6 offset3">
+            <div id="register-wraper">
+                <form id="demoForm" class="login-form" method="post" action="/register">
+                    <legend>TODOlist<span class="blue">Register</span></legend>
 
-<div class="container">
-
-    <div id="login-wraper" class="login-form">
-
-        <legend>TODOlist<span class="blue">Register</span></legend>
-
-        <% if (message.length>0) { %>
-        <div class="alert error"><%= message %></div>
-        <% } %>
-
-        <form id="demoForm" class="login-form" method="post" action="/register"">
-        <div class="body">
-				<span class="step" id="first">
-					<span class="font_normal_07em_black">Paso 1 - Datos personales</span><br />
+                    <div id="divCheckPasswordMatch" <% if (message.length>0) { %>class="alert error"<% } %>><%= message %></div>
+                    <div class="body">
+                        <!-- first name -->
+                        <span class="step" id="first">
+					<span class="font_normal_07em_black">Paso 1 - Datos personales</span><br/>
+                            <br/>
 					<input name="name" type="text" class="input-block-level" placeholder="Nombre">
 					<input name="surname" type="text" class="input-block-level" placeholder="Apellidos">
-                    <input name="email" type="text" class="input-block-level"
-                           placeholder="Email" onchange="validarEmail(this.form.email.value);">
+                    <input id="email" name="email" type="text" class="input-block-level"
+                           placeholder="Email">
                     <input name="country" type="text" class="input-block-level" placeholder="País">
                     <input name="city" type="text" class="input-block-level" placeholder="Ciudad">
 				</span>
 				<span id="second" class="step">
-					<span class="font_normal_07em_black">Paso 2 - Datos de usuario</span><br />
+					<span class="font_normal_07em_black">Paso 2 - Datos de usuario</span><br/>
+                    <br/>
 					<input name="username" type="text" class="input-block-level" placeholder="Usuario">
                     <input name="password" type="password" class="input-block-level"
                            placeholder="Contraseña" id="txtNewPassword">
                     <input type="password" class="input-block-level"
-                           placeholder="Confirmar contraseña" id="txtConfirmPassword" onchange="checkPasswordMatch()">
+                           placeholder="Confirmar contraseña" id="txtConfirmPassword">
                     <h6>Pregunta Secreta</h6>
-                    <select name="question">
+                    <select class="btn-block" name="question">
                         <option value="1">Nombre de tu mejor amigo de la infancia</option>
                         <option value="2">Nombre de tu primera mascota</option>
                         <option value="3">Nombre de tu primer colegio</option>
                     </select>
                     <input name="answer" type="text" class="input-block-level" placeholder="Respuesta">
 				</span>
-        </div>
-        <div id="demoNavigation">
-            <button class="btn btn-short btn-primary" type="reset">Anterior</button>
-            <button class="btn btn-short btn-primary" type="submit">Siguiente</button>
-        </div>
-        </div>
-            <div class="registrationFormAlert" id="divCheckPasswordMatch">
-        </div>
-        </form>
-    </div>
 
+                    </div>
+
+                    <div id="demoNavigation">
+                        </br>
+                        <button class="btn btn-short btn-primary" type="reset">Anterior</button>
+                        <button class="btn btn-short btn-primary" type="submit">Siguiente</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <footer class="white navbar-fixed-bottom">
-    Volver a la página de  <a href="/login" class="btn btn-black">Login</a>
+    Volver a la página de <a href="/login" class="btn btn-black">Login</a>
 </footer>
 
 
@@ -99,36 +97,60 @@
 
 
 <script type="text/javascript">
-    $(function(){
+    $(function () {
         $("#demoForm").formwizard({
-                    validationEnabled: true,
-                    focusFirstInput : true
+                    validationEnabled:true,
+                    focusFirstInput:true
                 }
         );
     });
 </script>
 
 <script>
-    function validarEmail(valor) {
-        if (/w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/.test(valor)){
+
+    $("#email").change(function(){
+        validarEmail();
+    });
+    $("#txtNewPassword").change(function(){
+        checkPasswordMatch();
+    });
+    $("#txtConfirmPassword").change(function(){
+        checkPasswordMatch();
+    });
+    $("#demoForm").submit(function(){
+        if (checkPasswordMatch() && validarEmail()) return true;
+        else return false;
+    })
+
+    function validarEmail() {
+        var valor = $("#email").val();
+        if (/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(valor)) {
+            $("#divCheckPasswordMatch").html("");
+            $("#divCheckPasswordMatch").removeClass('alert alert-error');
             return (true)
         } else {
-            alert(valor);
+            $("#divCheckPasswordMatch").html("El email no es válido\n");
+            $("#divCheckPasswordMatch").addClass('alert alert-error');
             return (false);
         }
     }
-</script>
-
-<script>
     function checkPasswordMatch() {
         var password = $("#txtNewPassword").val();
         var confirmPassword = $("#txtConfirmPassword").val();
 
-        if (password != confirmPassword)
-            $("#divCheckPasswordMatch").html("Las contraseñas no coinciden!");
-        else
-            $("#divCheckPasswordMatch").html("Las contraseñas coinciden");
-}</script>
+        if (password != confirmPassword){
+            $("#divCheckPasswordMatch").html("Las contraseñas no coinciden\n");
+            $("#divCheckPasswordMatch").addClass('alert alert-error');
+            return false
+        }else{
+            $("#divCheckPasswordMatch").html("");
+            $("#divCheckPasswordMatch").removeClass('alert alert-error');
+            return true;
+        }
+
+    }
+
+</script>
 
 
 </body>

@@ -27,52 +27,50 @@ body {
 	border-bottom: 2px solid gray;
 }
 .task{
+    height: 100px;
 	text-align: center;
-	vertical-align: middle;
-	height: 70px;
+	line-height: 8em;
 	padding: 10px;
-    color: white;
-
+    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
+    box-shadow:inset 0px 1px 0px 0px #ffffff;
+    background-color:#ededed;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px;
+    border-radius:6px;
+    border:1px solid #dcdcdc;
+    color:#777777;
+    font-family:arial;
+    font-size:15px;
+    font-weight:bold;
+    padding:6px 24px;
+    text-decoration:none;
+    text-shadow:1px 1px 0px #ffffff;
+    line-height: 8em;
 }
 .task:hover{
 	text-decoration: none;
-	border-style: solid
+	border-style: solid;
+    background-color:#dfdfdf;
 }
 
 .incompleted{
-    background: -moz-radial-gradient(center, ellipse cover,  rgba(136,191,232,1) 0%, rgba(112,176,224,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(136,191,232,1)), color-stop(100%,rgba(112,176,224,1))); /* Chrome,Safari4+ */
-    background: -webkit-radial-gradient(center, ellipse cover,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-radial-gradient(center, ellipse cover,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); /* Opera 12+ */
-    background: -ms-radial-gradient(center, ellipse cover,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); /* IE10+ */
-    background: radial-gradient(ellipse at center,  rgba(136,191,232,1) 0%,rgba(112,176,224,1) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#88bfe8', endColorstr='#70b0e0',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    color: #4787ED;
 }
 
 .completed{
-    background: rgb(147,229,135); /* Old browsers */
-    background: -moz-radial-gradient(center, ellipse cover,  rgba(147,229,135,1) 0%, rgba(113,188,118,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(147,229,135,1)), color-stop(100%,rgba(113,188,118,1))); /* Chrome,Safari4+ */
-    background: -webkit-radial-gradient(center, ellipse cover,  rgba(147,229,135,1) 0%,rgba(113,188,118,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-radial-gradient(center, ellipse cover,  rgba(147,229,135,1) 0%,rgba(113,188,118,1) 100%); /* Opera 12+ */
-    background: -ms-radial-gradient(center, ellipse cover,  rgba(147,229,135,1) 0%,rgba(113,188,118,1) 100%); /* IE10+ */
-    background: radial-gradient(ellipse at center,  rgba(147,229,135,1) 0%,rgba(113,188,118,1) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#93e587', endColorstr='#71bc76',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    color: #54cd44;
 }
 
 .expired{
-    background: rgb(226,102,102); /* Old browsers */
-    background: -moz-radial-gradient(center, ellipse cover,  rgba(226,102,102,1) 0%, rgba(186,91,91,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%,rgba(226,102,102,1)), color-stop(100%,rgba(186,91,91,1))); /* Chrome,Safari4+ */
-    background: -webkit-radial-gradient(center, ellipse cover,  rgba(226,102,102,1) 0%,rgba(186,91,91,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-radial-gradient(center, ellipse cover,  rgba(226,102,102,1) 0%,rgba(186,91,91,1) 100%); /* Opera 12+ */
-    background: -ms-radial-gradient(center, ellipse cover,  rgba(226,102,102,1) 0%,rgba(186,91,91,1) 100%); /* IE10+ */
-    background: radial-gradient(ellipse at center,  rgba(226,102,102,1) 0%,rgba(186,91,91,1) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e26666', endColorstr='#ba5b5b',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    color: #E26666;
 }
 
-#newTask{
-    background: url('img/glyphicons_190_circle_plus.png')
+.icon-big-plus{
+    background-image: url("/img/glyphicons-big.png");
+    width: 26px;
+    height: 26px;
+    background-position: -1px -912px;
 }
 
 .listsLinks {
