@@ -13,9 +13,9 @@ function equalHeight(group) {
 	});
 }
 function changeList(list){
-	$('.taskList').empty();
-	$('.taskListTitle').empty();
-	$('.taskListTitle').append('<h2>'+list+'<button href="#newTaskModal" class="btn btn-primary pull-right" data-toggle="modal"><h1>+</h1></button></h2>');
+	$('#taskList').empty();
+	$('#taskListTitle').empty();
+	$('#taskListTitle').append('<h1>'+list+'</h1><hr>');
 	$('#dropdownLists').val(list);
 	var i=0;
     var dropdownIndex=$('#dropdownLists').get(0).selectedIndex;
@@ -27,7 +27,7 @@ function changeList(list){
     	}
     });
     var modelTasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
-    var tasksView=new TasksView({el: $('.taskList'), model: modelTasks});
+    var tasksView=new TasksView({el: $('#taskList'), model: modelTasks});
     tasksView.render();
 }
 var List=Backbone.Model.extend({
@@ -74,14 +74,14 @@ var ListsView=Backbone.View.extend({
     	});
         var template = _.template( $("#listsNavbar").html(), {lists: listNameArray} );
         this.$el.append( template );
-        $('.listElement').on('click',function(event) { 
+        $('.listElement').on('click',function(event) {
 	    	var list=$(this).text();
 	    	$('#dropdownLists').val(list);
 	    	$(this).parent().parent().find('.active').removeClass('active');
 	    	$(this).parent().addClass('active');
 	    	changeList(list);
     	});
-    	$('#dropdownLists').change(function() { 
+    	$('#dropdownLists').change(function() {
 	    	var list=$(this).val();
 	        changeList(list);
 	    });
@@ -108,16 +108,8 @@ var TasksView=Backbone.View.extend({
 	    		taskArray.push({name: task.get('name'),limitDate: task.get('limitDay')+"/"+task.get('limitMonth')+"/"+task.get('limitYear')});
 	    	}
     	});
-    	for(var i=0,len=taskArray.length;i<len;i+=4){
-    		var j=0;
-    		var taskArrayMin=[];
-    		while (j+i<taskArray.length&&j<4){
-	    		taskArrayMin.push(taskArray[i+j]);
-	    		j++;
-    		}
-	    	var template = _.template( $("#taskRowTemplate").html(), {tasks: taskArrayMin} );
+	    	var template = _.template( $("#taskRowTemplate").html(), {tasks: taskArray} );
 	    	this.$el.append( template );
-    	}
     	$('.task').click(function() {
 		    var taskName = $(this).data('name');
 		    $('#inputTitle').val(taskName);
@@ -240,6 +232,6 @@ $(document).ready(function() {
 		    	return false;
 	    	}
     	})
-    	
+
     });
 });

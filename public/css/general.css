@@ -19,6 +19,14 @@ body {
     min-width: 200px;
     padding: 10px;
 }
+
+.todoTasks{
+    overflow-y: scroll;
+    position: relative;
+    height: 600px;
+    min-width: 200px;
+    padding: 10px;
+}
 .taskListTitle{
 	background-color: white;
 	text-align: center;
@@ -26,11 +34,14 @@ body {
 	color: white;
 	border-bottom: 2px solid gray;
 }
+
+.taskList li {
+    margin-left:10px
+}
+
 .task{
     height: 100px;
 	text-align: center;
-	line-height: 8em;
-	padding: 10px;
     -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
     -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
     box-shadow:inset 0px 1px 0px 0px #ffffff;
@@ -43,10 +54,9 @@ body {
     font-family:arial;
     font-size:15px;
     font-weight:bold;
-    padding:6px 24px;
     text-decoration:none;
     text-shadow:1px 1px 0px #ffffff;
-    line-height: 8em;
+    padding-top: 50px;
 }
 .task:hover{
 	text-decoration: none;
