@@ -33,7 +33,6 @@ function changeList(list){
 var List=Backbone.Model.extend({
 	defaults:{
 		name: '',
-		tasks: new TaskList()
 	},
 	initialize: function(attrs,opts){}
 });
