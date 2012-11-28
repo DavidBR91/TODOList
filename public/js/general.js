@@ -33,7 +33,7 @@ function changeList(list){
 var List=Backbone.Model.extend({
 	defaults:{
 		name: '',
-		tasks: []
+		tasks: new TaskList()
 	},
 	initialize: function(attrs,opts){}
 });
@@ -97,6 +97,7 @@ var TasksView=Backbone.View.extend({
 	initialize: function(){
 		this.model.bind('add',this.render,this);
 		this.model.bind('remove',this.render,this);
+		this.model.bind('change',this.render,this);
     },
     render: function(){
     	var taskArray=[];
@@ -122,14 +123,15 @@ var TasksView=Backbone.View.extend({
 		    var taskName = $(this).data('name');
 		    $('#inputTitle').val(taskName);
 		    $('#taskOptionsLabel').text(taskName);
-		    model.each(function(task) {
+		    var tasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
+		    tasks.each(function(task) {
 		    	if(task.get('name')===taskName){
 			    	$('#inputDescription').val(task.get('description'));
 			    	$('#inputLimitDay').val(task.get('limitDay'));
 			    	$('#inputLimitMonth').val(task.get('limitMonth'));
 			    	$('#inputLimitYear').val(task.get('limitYear'));
 			    	$('#inputExpectedDays').val(task.get('expectedDays'));
-			    	task.get('completed')==0 ?  ('#inputCompleted').attr('checked', false):('#inputCompleted').attr('checked', true);
+			    	task.get('completed')==0 ?  $('#inputCompleted').attr('checked', false):$('#inputCompleted').attr('checked', true);
 		    	}
 		    });
 	    });
@@ -202,11 +204,19 @@ $(document).ready(function() {
 	$('.listElement').first().parent().addClass('active');
 	equalHeight($(".taskRow .task"));
     $('#submitButton').on('click', function(e){
-    	e.preventDefault();
-    	$('.taskOptionsForm').submit();
+    	var tasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
+    	tasks.each(function(task) {
+	    	if(task.get('name')==$('#taskOptionsLabel').text()){
+	    		task.set({name: $('#inputTitle').val(),description: $('#inputDescription').val(),limitYear: $('#inputLimitYear').val(),limitMonth: $('#inputLimitMonth').val(),limitDay: $('#inputLimitDay').val(),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')==false?0:1});
+	    		$("#taskOptions").modal('hide');
+		    	return false;
+	    	}
+    	})
+    	//$('.taskOptionsForm').submit();
     });
     $('#submitNewListButton').on('click', function(e){
-    	var newTaskName=$('#inputTaskName').val();
+    	var newListName=$('#inputListName').val();
+    	lists.add(new List({name: newListName, tasks: new TaskList([])}));
     	$("#newList").modal('hide');
     	changeList(newListName);
     	//$('.newListForm').submit();
