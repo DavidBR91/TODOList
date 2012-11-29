@@ -103,14 +103,14 @@ var TasksView=Backbone.View.extend({
     	this.$el.empty();
     	this.model.each(function(task) {
     		if(task.get('limitDay')==0||task.get('limitMonth')==0||task.get('limitYear')==0){
-	    		taskArray.push({name: task.get('name'),limitDate: ''});
+	    		taskArray.push({name: task.get('name'),limitDate: '', description : task.get('description')});
     		}else{
-	    		taskArray.push({name: task.get('name'),limitDate: task.get('limitDay')+"/"+task.get('limitMonth')+"/"+task.get('limitYear')});
+	    		taskArray.push({name: task.get('name'),limitDate: task.get('limitDay')+"/"+task.get('limitMonth')+"/"+task.get('limitYear'), description : task.get('description')});
 	    	}
     	});
 	    	var template = _.template( $("#taskRowTemplate").html(), {tasks: taskArray} );
 	    	this.$el.append( template );
-    	$('.task').click(function() {
+    	$('#task').click(function() {
 		    var taskName = $(this).data('name');
 		    $('#inputTitle').val(taskName);
 		    $('#taskOptionsLabel').text(taskName);

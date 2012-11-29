@@ -34,10 +34,11 @@ app.configure(function () {
 var desiredURL;
 
 app.get('/', function (req, res) {
-    res.redirect('/index');
+    res.redirect('/index.html');
 });
 
-app.get('/index', ensureAuthenticated, user.getAll);
+app.get('/index.html', ensureAuthenticated);
+
 
 app.get('/login', function (req, res) {
     res.render('login', { user: req.user, message: req.flash('error'), registered: req.flash('registered')});
