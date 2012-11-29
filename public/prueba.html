@@ -44,21 +44,21 @@
                     <span class="icon-bar"></span>
                 </a>
                 <a class="brand" href="#">TODOList</a>
-                    <ul class="nav pull-right">
+                <ul class="nav pull-right">
 
-                        <li>
-                            <a href="#">Registrate</a>
-                        </li>
-                        <li class="divider-vertical"></li>
+                    <li>
+                        <a href="#">Registrate</a>
+                    </li>
+                    <li class="divider-vertical"></li>
 
-                        <li><a href="#">Logout</a></li>
-                    </ul>
-                </div>
-                <!-- /.nav-collapse -->
+                    <li><a href="#">Logout</a></li>
+                </ul>
             </div>
+            <!-- /.nav-collapse -->
         </div>
-        <!-- /navbar-inner -->
     </div>
+    <!-- /navbar-inner -->
+</div>
 
 </div>
 
@@ -218,22 +218,33 @@
 <script src="js/underscore-min.js"></script>
 <script src="js/backbone-min.js"></script>
 <script type="text/template" id="taskRowTemplate">
-    <ul class="thumbnails">
         <% _.each(tasks, function(task) { %>
-        <li class="span2">
-            <a href="#taskOptions" role="button" data-name=<%= task.name %> class="thumbnail task completed" data-toggle="modal">
-            <h3><%= task.name %></h3>
-            <h4><%= task.limitDate %></h4>
-            </a>
-        </li>
+        <div class="box">
+            <div href="#taskOptions" role="button" data-name=<%= task.name %> class="task completed"
+            data-toggle="modal">
+
+                <div>
+                    <h3><%= task.name %></h3>
+                    <h4><%= task.limitDate %></h4>
+                </div>
+
+            </div>
+    <div class="task-desc">
+        <div class="name">Sample project 2</div>
+        <div class="desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean neque nulla, ultricies id eleifend non, dignissim vitae nunc. Morbi fringilla blandit urna nec blandit. </div>
+    </div>
+        </div>
         <% }); %>
-        <li class="span2">
-            <a href="#" class="thumbnail task">
-                <br/>
-                <i class="icon-big-plus"></i>
-            </a>
-        </li>
-        </ul>
+    <div class="box">
+        <div href="#taskOptions" role="button" class="task completed"
+        data-toggle="modal">
+        <div>
+            <h1 style="font-size : 50px;">+</h1>
+        </div>
+        </a>
+    </div>
+    </div>
+
 </script>
 <script type="text/template" id="listsNavbar">
     <select class="span10" id="dropdownLists">
