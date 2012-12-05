@@ -171,7 +171,10 @@ $(document).ready(function() {
 			if(typeof lists.at(0) != 'undefined') changeList(lists.at(0).get('name'));
 			$('.listElement').first().parent().addClass('active');
 			equalHeight($(".taskRow .task"));
-		    $('#submitButton').on('click', function(e){
+			$('#submitButton').on('click', function(e){
+				$('.taskOptionsForm').submit();	
+			});
+		    $('.taskOptionsForm').on('submit', function(e){
 		    	var tasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
 		    	tasks.each(function(task) {
 			    	if(task.get('name')==$('#taskOptionsLabel').text()){
@@ -182,7 +185,6 @@ $(document).ready(function() {
 				    	return false;
 			    	}
 		    	})
-		    	//$('.taskOptionsForm').submit();
 		    });
 		    $('#submitNewListButton').on('click', function(e){
 		    	$('.newListForm').submit();
@@ -209,9 +211,6 @@ $(document).ready(function() {
 		    	tasks.add(newTask);
 		    	newTask.save();
 		    	$("#newTaskModal").modal('hide');
-		    });
-		    $('.newListForm').on('submit',function() {
-			    $("#newList").modal('hide');
 		    });
 		    $('#removeButton').on('click', function(e){
 		    	var tasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
