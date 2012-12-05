@@ -63,7 +63,7 @@ exports.showAll = function (req, res) {
           if(!user){
             res.json({ok : true, data : null}, 200);
           } else {
-            res.json({ok : true, data : user.taskList}, 200);
+            res.json(user.taskList, 200);
           }
         }
       });

@@ -31,34 +31,61 @@ function changeList(list){
     tasksView.render();
 }
 var List=Backbone.Model.extend({
+	idAttribute: '_id',
 	defaults:{
 		name: '',
 	},
-	initialize: function(attrs,opts){}
+	parse: function(response) {
+		var taskList=[];
+		this.url='/list/'+response._id;
+		_.each(response.tasks,function(taskid) {
+			var task=new Task({listid: response._id, _id: taskid});
+			task.fetch({
+				success: function(task) {}
+			});
+			taskList.push(task);
+		});
+		response.tasks=new TaskList(taskList);
+		response.tasks.setParams(response._id,this,response.user);
+		return response;
+	}
 });
 var Lists=Backbone.Collection.extend({
 	model: List,
+	url: '/list',
 	comparator: function(list) {
 		return list.name
 	}
 });
 var Task=Backbone.Model.extend({
+	idAttribute: '_id',
+	initialize: function(options) {
+		if(typeof options._id!='undefined'){
+			this.url='/list/'+options.listid+'/task/'+options._id;
+		}
+	},
 	defaults:{
 		name: '',
 		description: '',
-		limitYear: 0,
+		/*limitYear: 0,
 		limitMonth: 0,
-		limitDay: 0,
+		limitDay: 0,*/
 		expectedDays: 0,
 		completed: 0
 	},
-	initialize: function(attrs,opts){}
 });
 var TaskList=Backbone.Collection.extend({
 	model: Task,
+	setParams: function(listid,list,user) {
+		this.url='/list/'+listid+'/task';
+		this.list=list;
+		this.user=user;
+	},
 	comparator: function(task) {
-		var date=new Date(task.get("limitYear"),task.get("limitMonth"),task.get("limitDay"),0,0,0,0);
-		return date.getTime();
+		//var date=new Date(task.get("limitYear"),task.get("limitMonth"),task.get("limitDay"),0,0,0,0);
+		//return date.getTime();
+		if(typeof task.expiration_date != 'undefined') return task.expiration_date.getTime();
+		else return task.name;
 	}
 });
 var ListsView=Backbone.View.extend({
@@ -86,7 +113,9 @@ var ListsView=Backbone.View.extend({
 	        changeList(list);
 	    });
 	     $('#deleteList').on('click', function(e){
-	    	lists.remove(lists.at($('#dropdownLists').get(0).selectedIndex));
+	     	var list=lists.at($('#dropdownLists').get(0).selectedIndex);
+	    	lists.remove(list);
+	    	list.destroy();
 	    	changeList(lists.at(0).get('name'));
 	    });
         return this;
@@ -102,11 +131,12 @@ var TasksView=Backbone.View.extend({
     	var taskArray=[];
     	this.$el.empty();
     	this.model.each(function(task) {
-    		if(task.get('limitDay')==0||task.get('limitMonth')==0||task.get('limitYear')==0){
+    		/*if(task.get('limitDay')==0||task.get('limitMonth')==0||task.get('limitYear')==0){
 	    		taskArray.push({name: task.get('name'),limitDate: '', description : task.get('description')});
     		}else{
 	    		taskArray.push({name: task.get('name'),limitDate: task.get('limitDay')+"/"+task.get('limitMonth')+"/"+task.get('limitYear'), description : task.get('description')});
-	    	}
+	    	}*/
+	    	taskArray.push({name: task.get('name'),limitDate: task.get('expiration_date'), description : task.get('description')});
     	});
 	    	var template = _.template( $("#taskRowTemplate").html(), {tasks: taskArray} );
 	    	this.$el.append( template );
@@ -118,9 +148,12 @@ var TasksView=Backbone.View.extend({
 		    tasks.each(function(task) {
 		    	if(task.get('name')===taskName){
 			    	$('#inputDescription').val(task.get('description'));
-			    	$('#inputLimitDay').val(task.get('limitDay'));
+			    	/*$('#inputLimitDay').val(task.get('limitDay'));
 			    	$('#inputLimitMonth').val(task.get('limitMonth'));
-			    	$('#inputLimitYear').val(task.get('limitYear'));
+			    	$('#inputLimitYear').val(task.get('limitYear'));*/
+			    	$('#inputLimitDay').val(task.get('expiration_date').getDate());
+			    	$('#inputLimitMonth').val(task.get('expiration_date').getMonth()+1);
+			    	$('#inputLimitYear').val(task.get('expiration_date').getFullYear());
 			    	$('#inputExpectedDays').val(task.get('expectedDays'));
 			    	task.get('completed')==0 ?  $('#inputCompleted').attr('checked', false):$('#inputCompleted').attr('checked', true);
 		    	}
@@ -130,108 +163,68 @@ var TasksView=Backbone.View.extend({
     }
 });
 $(document).ready(function() {
-	var task1=new Task({name: 'task1', limitYear: 12, limitMonth: 12, limitDay: 12, description: 'hola'});
-	var task2=new Task({name: 'task2', limitYear: 11, limitMonth: 11, limitDay: 11});
-	var task3=new Task({name: 'task3', limitYear: 10, limitMonth: 10, limitDay: 10});
-	var task4=new Task({name: 'task4', limitYear: 9, limitMonth: 9, limitDay: 9});
-	var task5=new Task({name: 'task5', limitYear: 8, limitMonth: 8, limitDay: 8});
-	var task6=new Task({name: 'task6', limitYear: 12, limitMonth: 12, limitDay: 12});
-	var task7=new Task({name: 'task7', limitYear: 11, limitMonth: 11, limitDay: 11});
-	var task8=new Task({name: 'task8', limitYear: 10, limitMonth: 10, limitDay: 10});
-	var task9=new Task({name: 'task9', limitYear: 9, limitMonth: 9, limitDay: 9});
-	var task10=new Task({name: 'task10', limitYear: 8, limitMonth: 8, limitDay: 8});
-	var task11=new Task({name: 'task11', limitYear: 12, limitMonth: 12, limitDay: 12});
-	var task12=new Task({name: 'task12', limitYear: 11, limitMonth: 11, limitDay: 11});
-	var task13=new Task({name: 'task13', limitYear: 10, limitMonth: 10, limitDay: 10});
-	var task14=new Task({name: 'task14', limitYear: 9, limitMonth: 9, limitDay: 9});
-	var task15=new Task({name: 'task15', limitYear: 8, limitMonth: 8, limitDay: 8});
-	var task16=new Task({name: 'task16', limitYear: 12, limitMonth: 12, limitDay: 12});
-	var task17=new Task({name: 'task17', limitYear: 11, limitMonth: 11, limitDay: 11});
-	var task18=new Task({name: 'task18', limitYear: 10, limitMonth: 10, limitDay: 10});
-	var task19=new Task({name: 'task19', limitYear: 9, limitMonth: 9, limitDay: 9});
-	var task20=new Task({name: 'task20', limitYear: 8, limitMonth: 8, limitDay: 8});
-	var taskList1=new TaskList([task1,task2,task3,task4,task5,task6,task7,task8,task9,task10,task11, task12,task13,task14,task15,task16,task17,task18,task19,task20]);
-	var taskList2=new TaskList([task2,task4]);
-	var taskList3=new TaskList([task4,task5]);
-	var taskList4=new TaskList([task7,task8]);
-	var taskList5=new TaskList([task11,task12]);
-	var taskList6=new TaskList([task13,task14]);
-	var taskList7=new TaskList([task15,task16]);
-	var taskList8=new TaskList([task17,task18,task19]);
-	var taskList9=new TaskList([task20,task4,task10,task12]);
-	var taskList10=new TaskList([task8,task1,task1,task5]);
-	var taskList11=new TaskList([task1,task2,task3,task4,task5,task6,task7,task8,task9,task10,task11, task12,task13,task14,task15,task16,task17,task18,task19,task20]);
-	var taskList12=new TaskList([task2,task4]);
-	var taskList13=new TaskList([task4,task5]);
-	var taskList14=new TaskList([task7,task8]);
-	var taskList15=new TaskList([task11,task12]);
-	var taskList16=new TaskList([task13,task14]);
-	var taskList17=new TaskList([task15,task16]);
-	var taskList18=new TaskList([task17,task18,task19]);
-	var taskList19=new TaskList([task20,task4,task10,task12]);
-	var list1=new List({name: 'List1', tasks: taskList1});
-	var list2=new List({name: 'List2', tasks: taskList2});
-	var list3=new List({name: 'List3', tasks: taskList3});
-	var list4=new List({name: 'List4', tasks: taskList4});
-	var list5=new List({name: 'List5', tasks: taskList5});
-	var list6=new List({name: 'List6', tasks: taskList6});
-	var list7=new List({name: 'List7', tasks: taskList7});
-	var list8=new List({name: 'List8', tasks: taskList8});
-	var list9=new List({name: 'List9', tasks: taskList9});
-	var list10=new List({name: 'List10', tasks: taskList10});
-	var list11=new List({name: 'List11', tasks: taskList11});
-	var list12=new List({name: 'List12', tasks: taskList12});
-	var list13=new List({name: 'List13', tasks: taskList13});
-	var list14=new List({name: 'List14', tasks: taskList14});
-	var list15=new List({name: 'List15', tasks: taskList15});
-	var list16=new List({name: 'List16', tasks: taskList16});
-	var list17=new List({name: 'List17', tasks: taskList17});
-	var list18=new List({name: 'List18', tasks: taskList18});
-	var list19=new List({name: 'List19', tasks: taskList19});
-	lists=new Lists([list1,list2,list3,list4,list5,list6,list7,list8,list9,list10,list11,list12,list13,list14,list15,list16,list17,list18,list19]);
-	listsView=new ListsView({el: $('.todoLists'), model: lists});
-	listsView.render();
-	changeList(lists.at(0).get('name'));
-	$('.listElement').first().parent().addClass('active');
-	equalHeight($(".taskRow .task"));
-    $('#submitButton').on('click', function(e){
-    	var tasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
-    	tasks.each(function(task) {
-	    	if(task.get('name')==$('#taskOptionsLabel').text()){
-	    		task.set({name: $('#inputTitle').val(),description: $('#inputDescription').val(),limitYear: $('#inputLimitYear').val(),limitMonth: $('#inputLimitMonth').val(),limitDay: $('#inputLimitDay').val(),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')==false?0:1});
-	    		$("#taskOptions").modal('hide');
-		    	return false;
-	    	}
-    	})
-    	//$('.taskOptionsForm').submit();
-    });
-    $('#submitNewListButton').on('click', function(e){
-    	var newListName=$('#inputListName').val();
-    	lists.add(new List({name: newListName, tasks: new TaskList([])}));
-    	$("#newList").modal('hide');
-    	changeList(newListName);
-    	//$('.newListForm').submit();
-    });
-    $('#submitNewTaskButton').on('click', function(e){
-    	var newTaskName=$('#inputTaskName').val();
-    	var listName=lists.at($('#dropdownLists').get(0).selectedIndex).get('name');
-    	var tasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
-    	tasks.add(new Task({name: newTaskName}));
-    	$("#newTaskModal").modal('hide');
-    	//$('.newTaskForm').submit();
-    });
-    $('.newListForm').on('submit',function() {
-	    $("#newList").modal('hide');
-    });
-    $('#removeButton').on('click', function(e){
-    	var tasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
-    	tasks.each(function(task) {
-	    	if(task.get('name')==$('#taskOptionsLabel').text()){
-	    		tasks.remove(task);
-	    		$("#taskOptions").modal('hide');
-		    	return false;
-	    	}
-    	})
-
-    });
+	lists=new Lists();
+	lists.fetch({
+		success: function() {
+			listsView=new ListsView({el: $('.todoLists'), model: lists});
+			listsView.render();
+			if(typeof lists.at(0) != 'undefined') changeList(lists.at(0).get('name'));
+			$('.listElement').first().parent().addClass('active');
+			equalHeight($(".taskRow .task"));
+		    $('#submitButton').on('click', function(e){
+		    	var tasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
+		    	tasks.each(function(task) {
+			    	if(task.get('name')==$('#taskOptionsLabel').text()){
+			    		//task.set({name: $('#inputTitle').val(),description: $('#inputDescription').val(),limitYear: $('#inputLimitYear').val(),limitMonth: $('#inputLimitMonth').val(),limitDay: $('#inputLimitDay').val(),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')==false?0:1});
+			    		console.log(task);
+			    		task.save({name: $('#inputTitle').val(),description: $('#inputDescription').val(),expiration_Date: new Date($('#inputLimitYear').val(),$('#inputLimitMonth').val(),$('#inputLimitDay').val(),0,0,0,0),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')==false?0:1});
+			    		$("#taskOptions").modal('hide');
+				    	return false;
+			    	}
+		    	})
+		    	//$('.taskOptionsForm').submit();
+		    });
+		    $('#submitNewListButton').on('click', function(e){
+		    	$('.newListForm').submit();
+		    });
+		    $('.newListForm').on('submit', function(e){
+		    	var newListName=$('#inputListName').val();
+		    	$('#inputListName').val('')
+		    	var newList=new List({name: newListName, tasks: new TaskList(newListName)});
+		    	lists.add(newList);
+		    	newList.save();
+		    	$("#newList").modal('hide');
+		    	changeList(newListName);
+		    });
+		    $('#submitNewTaskButton').on('click', function(e){
+			    $('.newTaskForm').submit();
+			});
+		    $('.newTaskForm').on('submit', function(e){
+		    	var newTaskName=$('#inputTaskName').val();
+		    	$('#inputTaskName').val('')
+		    	var selectedList=lists.at($('#dropdownLists').get(0).selectedIndex);
+		    	var listName=selectedList.get('name');
+		    	var tasks=selectedList.get('tasks');
+		    	var newTask=new Task({listid: selectedList.get('_id'),name: newTaskName});
+		    	tasks.add(newTask);
+		    	newTask.save();
+		    	$("#newTaskModal").modal('hide');
+		    });
+		    $('.newListForm').on('submit',function() {
+			    $("#newList").modal('hide');
+		    });
+		    $('#removeButton').on('click', function(e){
+		    	var tasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
+		    	tasks.each(function(task) {
+			    	if(task.get('name')==$('#taskOptionsLabel').text()){
+			    		tasks.remove(task);
+			    		task.destroy();
+			    		$("#taskOptions").modal('hide');
+				    	return false;
+			    	}
+		    	})
+		
+		    });
+		}
+	});
 });

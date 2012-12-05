@@ -12,7 +12,7 @@ var TaskSchema = new Schema({
   name:{type : String, required : true},
   description:String,
   creation_date: {type:Date, default:Date.now },
-  expiration_date: {type : Date, required : true },
+  expiration_date: {type : Date, required : false },
   completed : {type : Boolean, default : false}
 });
 
@@ -87,7 +87,7 @@ exports.show = function (req, res) {
         res.json({ok:true, data:null}, 200);
       }
       else if (task.user.toString() === req.user.id && task.list.toString() === req.params.listid) {
-        res.json({ok:true, data:task}, 200);
+        res.json(task, 200);
       }
       else {
         res.json({ok:false, error:"Not authorized"}, 401);
