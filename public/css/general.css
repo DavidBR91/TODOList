@@ -1,6 +1,7 @@
 html, body {
     width: auto;
     margin: 0px;
+    height: 100%;
 }
 
 .padding0 {
@@ -14,17 +15,13 @@ html, body {
 
 .todoLists {
     position: relative;
-    height: 600px;
     min-width: 200px;
-    padding: 10px;
 }
 
 .todoTasks {
     overflow-y: scroll;
     position: relative;
-    height: 600px;
     min-width: 200px;
-    padding: 10px;
 }
 
 .taskListTitle {
@@ -135,8 +132,7 @@ html, body {
 }
 
 .listsLinks {
-    height: 80%;
-    min-height: 240px;
+    height: 70%;
     overflow-y: scroll;
     background: #ffffff;
 }
@@ -146,10 +142,11 @@ html, body {
 }
 
 .listsAddDelete {
-    bottom: 0;
     padding: 20px;
+    margin: 0 auto;
+    text-align: center;
 }
 
-.shortcutTask {
-    height: 100px;
+.tall {
+    height: 100%;
 }

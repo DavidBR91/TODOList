@@ -7,7 +7,7 @@ var express = require('express')
     list = require('./router/list.js'),
     task = require('./router/task.js');
 
-mongoose.connect('mongodb://localhost:27017/test');
+mongoose.connect('mongodb://localhost:27017/test2');
 user.localAuth(passport);
 
 var app = express();

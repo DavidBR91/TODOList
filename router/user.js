@@ -53,10 +53,10 @@ var localAuth = function (passport) {
             return done(err);
           }
           if (!user) {
-            return done(null, false, { message:'Unknown user ' + username });
+            return done(null, false, { message:'El usuario ' + username +' no existe'});
           }
           if (user.password !== password) {
-            return done(null, false, { message:'Invalid password' });
+            return done(null, false, { message:'Contraseña incorrecta' });
           }
           return done(null, user);
         });
@@ -74,28 +74,23 @@ exports.register = function (req, done) {
 
   process.nextTick(function () {
     var userData = _.pick(req.body, 'username', 'password', 'name', 'surname', 'email', 'country', 'city');
-    if (!(_.isEmpty(_.difference(['username', 'password', 'name', 'surname', 'email', 'country', 'city'], _.keys(userData))))){
-      done(true, false, { message:'No has completado todos los datos:' });
-    }
-    else {
     User.findOne({username:userData.username}, function (err, user) {
       console.log(user);
       if (err) {
-        return done(err);
+        return done(err, null, { message:'Server Error'});
       }
       if (user) {
-        done(null, false, { message:'This username is already chosen: ' + userData.username });
+        done(null, false, { message:'Este nombre ya está en uso: ' + userData.username });
       } else {
         var newUser = new User(userData);
         newUser.save(function (err, user) {
           if (err) {
-            done(err);
+            return done(err, null, { message:'No has completado todos los campos'});
           }
           done(null, user);
         });
       }
     });
-    }
   });
 };
 

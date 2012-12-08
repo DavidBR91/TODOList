@@ -83,6 +83,7 @@ exports.show = function (req, res) {
       res.json({ok:false, error:error});
     }
     else {
+      console.log(task.user);
       if (!task) {
         res.json({ok:true, data:null}, 200);
       }

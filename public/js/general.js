@@ -72,7 +72,7 @@ var Task=Backbone.Model.extend({
 		limitDay: 0,*/
 		expectedDays: 0,
 		completed: 0
-	},
+	}
 });
 var TaskList=Backbone.Collection.extend({
 	model: Task,

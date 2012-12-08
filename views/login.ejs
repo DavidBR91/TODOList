@@ -20,11 +20,56 @@
 
     <!-- Le favicon -->
     <link rel="shortcut icon" href="favicon.ico">
+    <style type="text/css">
+        .overlay {
+            position: fixed;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+
+        }
+
+        .overlayModal {
+            position: absolute;
+            width: 100%;
+            z-index: 101;
+            text-align: center;
+            top: 30%;
+        }
+
+        .overlayContainer {
+            margin: 0 auto;
+            background: #000000;
+            padding: 20px;
+            width: 100px;
+            height: 100px;
+            -webkit-border-radius: 15px;
+            -moz-border-radius: 15px;
+            -ms-border-radius: 15px;
+            -o-border-radius: 15px;
+            border-radius: 15px;
+            -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+            -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+        }
+    </style>
 
 </head>
 
 <body>
-
+<div id="overlay" class="overlay">
+    <div class="overlayModal">
+        <div class="overlayContainer">
+            <img src="img/loading.gif">
+        </div>
+    </div>
+</div>
 <div class="container">
 
     <div id="login-wraper">
@@ -55,7 +100,6 @@
             </div>
 
 
-
         </form>
     </div>
 
@@ -69,11 +113,15 @@
 <!-- Le javascript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
-<script src="js/jquery.js"></script>
+<script src="js/jquery-1.4.2.min.js"></script>
 <script src="js/bootstrap.js"></script>
-<script src="js/backstretch.min.js"></script>
-<script src="js/typica-login.js"></script>
-
+<script type="text/javascript">
+    $("form").submit(function(){
+        setTimeout(function(){
+            $("#overlay").fadeIn();
+        },2000)
+    })
+</script>
 
 
 </body>
