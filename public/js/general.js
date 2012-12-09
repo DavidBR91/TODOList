@@ -32,9 +32,6 @@ function changeList(list){
 }
 var List=Backbone.Model.extend({
 	idAttribute: '_id',
-	defaults:{
-		name: '',
-	},
 	parse: function(response) {
 		var taskList=[];
 		this.url='/list/'+response._id;
@@ -67,11 +64,9 @@ var Task=Backbone.Model.extend({
 	defaults:{
 		name: '',
 		description: '',
-		/*limitYear: 0,
-		limitMonth: 0,
-		limitDay: 0,*/
+		expiration_date : new Date(),
 		expectedDays: 0,
-		completed: 0
+		completed: false
 	}
 });
 var TaskList=Backbone.Collection.extend({
@@ -121,6 +116,14 @@ var ListsView=Backbone.View.extend({
         return this;
     }
 });
+
+var inDes = $('#inputDescription');
+var inLimD = $('#inputLimitDay');
+var inLimM= $('#inputLimitMonth');
+var inLimY = $('#inputLimitYear');
+var inComp = $('#inputCompleted');
+var inExpD = $('#inputExpectedDays');
+
 var TasksView=Backbone.View.extend({
 	initialize: function(){
 		this.model.bind('add',this.render,this);
@@ -136,10 +139,11 @@ var TasksView=Backbone.View.extend({
     		}else{
 	    		taskArray.push({name: task.get('name'),limitDate: task.get('limitDay')+"/"+task.get('limitMonth')+"/"+task.get('limitYear'), description : task.get('description')});
 	    	}*/
-	    	taskArray.push({name: task.get('name'),limitDate: task.get('expiration_date'), description : task.get('description')});
+	    	taskArray.push({name: task.get('name'),limitDate: task.get('expiration_date'), completed : task.get('completed'), description : task.get('description')});
     	});
 	    	var template = _.template( $("#taskRowTemplate").html(), {tasks: taskArray} );
 	    	this.$el.append( template );
+      $('[rel=tooltip]').tooltip();
     	$('#task').click(function() {
 		    var taskName = $(this).data('name');
 		    $('#inputTitle').val(taskName);
@@ -147,15 +151,12 @@ var TasksView=Backbone.View.extend({
 		    var tasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
 		    tasks.each(function(task) {
 		    	if(task.get('name')===taskName){
-			    	$('#inputDescription').val(task.get('description'));
-			    	/*$('#inputLimitDay').val(task.get('limitDay'));
-			    	$('#inputLimitMonth').val(task.get('limitMonth'));
-			    	$('#inputLimitYear').val(task.get('limitYear'));*/
-			    	$('#inputLimitDay').val(task.get('expiration_date').getDate());
-			    	$('#inputLimitMonth').val(task.get('expiration_date').getMonth()+1);
-			    	$('#inputLimitYear').val(task.get('expiration_date').getFullYear());
-			    	$('#inputExpectedDays').val(task.get('expectedDays'));
-			    	task.get('completed')==0 ?  $('#inputCompleted').attr('checked', false):$('#inputCompleted').attr('checked', true);
+			    	inDes.val(task.get('description'));
+			    	inLimD.val(task.get('expiration_date').getDate());
+			    	inLimM.val(task.get('expiration_date').getMonth()+1);
+			      inLimY.val(task.get('expiration_date').getFullYear());
+			    	inExpD.val(task.get('expectedDays'));
+			    	task.get('completed') ?  inComp.attr('checked', false) : inComp.attr('checked', true);
 		    	}
 		    });
 	    });
@@ -168,7 +169,7 @@ $(document).ready(function() {
 		success: function() {
 			listsView=new ListsView({el: $('.todoLists'), model: lists});
 			listsView.render();
-			if(typeof lists.at(0) != 'undefined') changeList(lists.at(0).get('name'));
+			changeList(lists.at(0).get('name'));
 			$('.listElement').first().parent().addClass('active');
 			equalHeight($(".taskRow .task"));
 			$('#submitButton').on('click', function(e){
@@ -180,7 +181,7 @@ $(document).ready(function() {
 			    	if(task.get('name')==$('#taskOptionsLabel').text()){
 			    		//task.set({name: $('#inputTitle').val(),description: $('#inputDescription').val(),limitYear: $('#inputLimitYear').val(),limitMonth: $('#inputLimitMonth').val(),limitDay: $('#inputLimitDay').val(),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')==false?0:1});
 			    		console.log(task);
-			    		task.save({name: $('#inputTitle').val(),description: $('#inputDescription').val(),expiration_Date: new Date($('#inputLimitYear').val(),$('#inputLimitMonth').val(),$('#inputLimitDay').val(),0,0,0,0),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')==false?0:1});
+			    		task.save({name: $('#inputTitle').val(),description: $('#inputDescription').val(),expiration_date: new Date($('#inputLimitYear').val(),$('#inputLimitMonth').val(),$('#inputLimitDay').val(),0,0,0,0),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')?true:false});
 			    		$("#taskOptions").modal('hide');
 				    	return false;
 			    	}

@@ -99,6 +99,10 @@ app.get('/list/:listid/task', ensureAuthenticated, task.showAll);
 
 app.get('/list/:listid/task/:taskid', ensureAuthenticated, task.show);
 
+app.put('/list/:listid/task/:taskid',ensureAuthenticated, task.update);
+
+app.delete('/list/:listid/task/:taskid',ensureAuthenticated, task.delete);
+
 app.listen(3000);
 
 function ensureAuthenticated(req, res, next) {

@@ -35,20 +35,18 @@
 
         }
 
-        .overlayModal {
-            position: absolute;
-            width: 100%;
-            z-index: 101;
-            text-align: center;
-            top: 30%;
-        }
-
         .overlayContainer {
-            margin: 0 auto;
-            background: #000000;
-            padding: 20px;
-            width: 100px;
-            height: 100px;
+            margin-top: -90px;
+            margin-left: -90px;
+            top: 50%;
+            left: 50%;
+            background: url("img/loading.gif") no-repeat;
+            background-size: 180px;
+            text-align: center;
+            width: 180px;
+            height: 180px;
+            z-index: 101;
+            position: absolute;
             -webkit-border-radius: 15px;
             -moz-border-radius: 15px;
             -ms-border-radius: 15px;
@@ -57,6 +55,11 @@
             -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
             -moz-box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+
+        }
+
+        .overlayContainer div {
+            padding: 10px;
         }
     </style>
 
@@ -64,9 +67,9 @@
 
 <body>
 <div id="overlay" class="overlay">
-    <div class="overlayModal">
-        <div class="overlayContainer">
-            <img src="img/loading.gif">
+    <div class="overlayContainer">
+        <div>
+            <p>Autenticando, por favor espere...</p>
         </div>
     </div>
 </div>
@@ -116,10 +119,10 @@
 <script src="js/jquery-1.4.2.min.js"></script>
 <script src="js/bootstrap.js"></script>
 <script type="text/javascript">
-    $("form").submit(function(){
-        setTimeout(function(){
+    $("form").submit(function () {
+        setTimeout(function () {
             $("#overlay").fadeIn();
-        },2000)
+        }, 2000)
     })
 </script>
 

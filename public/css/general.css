@@ -34,8 +34,8 @@ html, body {
 
 .box {
     padding: 10px;
-    width: 200px;
-    height: 200px;
+    width: 175px;
+    height: 175px;
     display: inline-block;
     margin: 10px;
     border: 1px solid rgba(0, 0, 0, 0.3);
@@ -52,12 +52,9 @@ html, body {
 
 .box .task {
     text-align: center;
-    background-color: #ededed;
-    color: #777777;
     font-size: 15px;
     font-weight: bold;
     text-decoration: none;
-    text-shadow: 1px 1px 0px #ffffff;
     overflow: hidden;
     white-space: nowrap;
     height: 100%;
@@ -65,16 +62,17 @@ html, body {
 }
 
 .box .task-desc {
-    width: 200px;
-    height: 200px;
+    width: 175px;
+    height: 175px;
     background: #EEE;
     color: #333;
     text-align: left;
     position: absolute;
-    margin-top: -200px;
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+    margin-top: -175px;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity = 0);
     opacity: 0;
 }
+
 .task:before {
     content: "";
     width: 1px;
@@ -87,6 +85,10 @@ html, body {
     display: inline-block;
     vertical-align: middle;
     white-space: normal;
+}
+
+.addTask:hover {
+    background: #c9c9c9;
 }
 
 .box .task-desc:hover {
@@ -102,26 +104,26 @@ html, body {
     -moz-transition: opacity .25s ease-in-out;
     -webkit-transition: opacity .25s ease-in-out;
     /* IE 10+ */
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity = 100);
     opacity: 1;
 }
 
-.name{
+.name {
     font-size: 20px;
     font-weight: bold;
-    line-height:30px
+    line-height: 30px
 }
 
 .incompleted {
-    color: #4787ED;
+    background: #4787ED;
 }
 
 .completed {
-    color: #54cd44;
+    background: #54cd44;
 }
 
 .expired {
-    color: #E26666;
+    background: #E26666;
 }
 
 .icon-big-plus {
@@ -149,4 +151,29 @@ html, body {
 
 .tall {
     height: 100%;
+}
+
+.favoritesCont * {
+    display: inline-block;
+}
+
+.favoritesCont *:before {
+    content: "";
+    width: 1px;
+    height: 100%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.favicon {
+    width: 35px;
+    float: right;
+    padding: 4px;
+    background: url("/img/Star_Empty.png") no-repeat center;
+    background-size: 27px;
+}
+
+.favicon:hover {
+    background: url("/img/Star_Gold.png") no-repeat center;
+    background-size: 27px;
 }

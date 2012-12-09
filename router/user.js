@@ -1,6 +1,7 @@
 var LocalStrategy = require('passport-local').Strategy,
   mongoose = require('mongoose'),
-  _ = require('underscore');
+  _ = require('underscore'),
+  list = require('./list.js');
 
 var Schema = mongoose.Schema;
 var ObjectId = Schema.ObjectId;
@@ -53,7 +54,7 @@ var localAuth = function (passport) {
             return done(err);
           }
           if (!user) {
-            return done(null, false, { message:'El usuario ' + username +' no existe'});
+            return done(null, false, { message:'El usuario ' + username + ' no existe'});
           }
           if (user.password !== password) {
             return done(null, false, { message:'Contraseña incorrecta' });
@@ -87,7 +88,15 @@ exports.register = function (req, done) {
           if (err) {
             return done(err, null, { message:'No has completado todos los campos'});
           }
-          done(null, user);
+          else {
+            var first_list = new list.List({user : user._id, name : "Lista principal" });
+            var fav_list = new list.List({user : user._id, name : "Favoritos"})
+            first_list.save();
+            fav_list.save();
+            user.taskList.push(first_list,fav_list);
+            user.save();
+            done(null, user);
+          }
         });
       }
     });

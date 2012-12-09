@@ -13,10 +13,13 @@ var TaskSchema = new Schema({
   description:String,
   creation_date: {type:Date, default:Date.now },
   expiration_date: {type : Date, required : false },
-  completed : {type : Boolean, default : false}
+  completed : {type : Boolean, default : false},
+  favorite : {type : Boolean, default : false}
 });
 
 var Task = mongoose.model('Task', TaskSchema);
+
+console.log(TaskSchema);
 
 exports.create = function (req, res) {
   var name = req.body.name;
@@ -32,7 +35,7 @@ exports.create = function (req, res) {
       } else if (!(_.contains(nameList, name))) {
         var task = new Task(_.pick(req.body, 'name', 'description', 'expiration_day', 'completed'));
         task.list = req.params.listid;
-        task.user = req.user._id;
+        task.user = list.user;
         task.save(function (err, task) {
           if (!err) {
             loc = req.headers.host + '/list/' + list.id + '/task/' + task.id;
@@ -83,12 +86,48 @@ exports.show = function (req, res) {
       res.json({ok:false, error:error});
     }
     else {
-      console.log(task.user);
       if (!task) {
         res.json({ok:true, data:null}, 200);
       }
       else if (task.user.toString() === req.user.id && task.list.toString() === req.params.listid) {
         res.json(task, 200);
+      }
+      else {
+        res.json({ok:false, error:"Not authorized"}, 401);
+      }
+    }
+  });
+};
+
+exports.update = function (req, res) {
+  'use strict';
+  Task.findById(req.params.taskid, function (err, task) {
+    var newAttributes;
+    // modify resource with allowed attributes
+    newAttributes = _.pick(req.body);
+    task = _.extend(task, newAttributes);
+    task.save(function (err) {
+      if (!err) {
+        res.json(task);
+      } else {
+        res.json({ok:false});
+      }
+    });
+  });
+};
+
+exports.delete = function (req, res) {
+  Task.findById(req.params.taskid, function (error, task) {
+    if (error) {
+      res.json({ok:false, error:error});
+    }
+    else {
+      if (!task) {
+        res.json({ok:true, data:null}, 200);
+      }
+      else if (task.user.toString() === req.user.id && task.list.toString() === req.params.listid) {
+        task.remove();
+        res.send(200);
       }
       else {
         res.json({ok:false, error:"Not authorized"}, 401);

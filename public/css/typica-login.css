@@ -351,6 +351,7 @@ footer.navbar-fixed-bottom {
 @media (max-width: 495px) {
     /* line 29, D:/DropBox/bootstrap/typica-login/sass/includes/_queries.scss */
     #login-wraper {
+        min-width: 250px;
         width: auto;
         height: auto;
         margin-left: 0;
