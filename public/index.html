@@ -47,8 +47,13 @@
         <div class="row-fluid tall">
             <div class="span3 tall">
                 <div class="sidewell todoLists tall">
-                    <div class="listsAddDelete"></div>
+                <div id="listsWell" ></div>
+                <div class="listsAddDelete">
+                    <button id="exportList" class="btn btn-primary">Exportar Listas</button>
+                    <button href="#newList" class="btn btn-primary" data-toggle="modal">Nueva lista</button>
+                    <button id="deleteList" class="btn btn-danger">Borrar lista</button>
                 </div>
+                    </div>
             </div>
             <div class="span9 tall">
                 <div class=" well todoTasks tall">
@@ -105,7 +110,7 @@
                     <input type="text" class="span2" id="inputLimitMonth" placeholder="0" size="1"
                            maxlength="2" max="12">
                     <input type="text" class="span2" id="inputLimitYear" placeholder="0" size="1"
-                           maxlength="2">
+                           maxlength="4">
                     (0/0/0=sin fecha limite)
                 </div>
             </div>
@@ -193,8 +198,8 @@
             </div>
 
         </div>
-        <div data-placement="right" rel="tooltip" title="<%= task.limitDate %>" id="task" href="#taskOptions" role="button"
-             data-name="<%= task.name%>" class="task-desc"
+        <div data-placement="right" rel="tooltip" title="<%= task.limitDate %>" href="#taskOptions" role="button"
+             data-name="<%= task.name%>" class="task-desc task"
              data-toggle="modal">
             <div class="favoritesCont">
                 <div class="name"><%= task.name %></div>
@@ -222,29 +227,25 @@
             <option><%= list.name %></option>
             <% }); %>
         </select>
-
         <div class="listsLinks">
             <ul class="nav nav-list">
                 <% _.each(lists, function(list) { %>
-                <li><a class="listElement" href="#"><%= list.name %></a>
+                <li><a class="listElement" href="#"><%= list.name %><input type="checkbox" class="pull-right"/></a>
                 <li>
                     <% }); %>
             </ul>
-        </div>
-        <div class="listsAddDelete">
-            <button href="#newList" class="btn btn-primary" data-toggle="modal">Nueva lista</button>
-            <button id="deleteList" class="btn btn-danger">Borrar lista</button>
         </div>
     </div>
 </script>
 <script src="js/general.js"></script>
 <script src="js/bootstrap.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
 
-        $('#scrollbar1').tinyscrollbar();
+        $('#exportList').click(function(){
+            console.log("entra");
+            exportLists();
+        });
 
-    });
 </script>
 
 </body>
