@@ -114,6 +114,14 @@ var ListsView=Backbone.View.extend({
 	    	list.destroy();
 	    	changeList(lists.at(0).get('name'));
 	    });
+        //console.log($(template).find('input'));
+        var inputs = $(template).find('input');
+        for(var i =0; i < inputs.length; i++){
+            inputs.eq(i).change(handler)
+        }
+        $(template).find('input').click(handler);
+        //template.find('input').change(handler);
+
         return this;
     }
 });
@@ -122,18 +130,20 @@ var handler = function(event) {
     var input = $(this);
     var parent = input.parent().parent();
     var index= parent.index();
+    console.log(lists[index]);
     if(input.checked){
-        exportList.push(list[index]);
+        exportList.push(lists[index]);
     }else{
         for(var i = 0; i < exportList.length; i++){
-            if(list[index] === exportList[i]){
-                list.pop(exportList[i]);
+            if(lists[index] === exportList[i]){
+                exportList.pop(lists[i]);
             }
         }
     }
-}
+    console.log(exportList);
+};
 
-$('.nav-list').find('input').change(handler);
+//$('.nav-list').find('input').change(handler);
 
 var inDes = $('#inputDescription');
 var inLimD = $('#inputLimitDay');
@@ -187,6 +197,10 @@ $(document).ready(function() {
 		success: function() {
 			listsView=new ListsView({el: $('#listsWell'), model: lists});
 			listsView.render();
+            var inputs = $('.nav-list').find('input');
+            inputs.each(function(i) {
+                inputs.eq(i).change(handler);
+            });
 			changeList(lists.at(0).get('name'));
 			$('.listElement').first().parent().addClass('active');
 			equalHeight($(".taskRow .task"));
