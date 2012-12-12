@@ -1,5 +1,6 @@
 var lists=[];
 var listsView=[];
+var exportList = [];
 function equalHeight(group) {
 	var tallest = 0;
 	group.each(function() {
@@ -117,6 +118,23 @@ var ListsView=Backbone.View.extend({
     }
 });
 
+var handler = function(event) {
+    var input = $(this);
+    var parent = input.parent().parent();
+    var index= parent.index();
+    if(input.checked){
+        exportList.push(list[index]);
+    }else{
+        for(var i = 0; i < exportList.length; i++){
+            if(list[index] === exportList[i]){
+                list.pop(exportList[i]);
+            }
+        }
+    }
+}
+
+$('.nav-list').find('input').change(handler);
+
 var inDes = $('#inputDescription');
 var inLimD = $('#inputLimitDay');
 var inLimM= $('#inputLimitMonth');
@@ -167,7 +185,7 @@ $(document).ready(function() {
 	lists=new Lists();
 	lists.fetch({
 		success: function() {
-			listsView=new ListsView({el: $('.todoLists'), model: lists});
+			listsView=new ListsView({el: $('#listsWell'), model: lists});
 			listsView.render();
 			changeList(lists.at(0).get('name'));
 			$('.listElement').first().parent().addClass('active');
@@ -228,3 +246,11 @@ $(document).ready(function() {
 		}
 	});
 });
+
+var exportLists= function(){
+    var txt ='';
+    for (var i = 0; i < exportList; i++) {
+        txt += exportList[i] + '\n';
+    }
+    window.open('data:download/plain;charset=utf-8,' + encodeURI(txt), '_blank');
+};
