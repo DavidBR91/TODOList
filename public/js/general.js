@@ -130,13 +130,13 @@ var handler = function(event) {
     var input = $(this);
     var parent = input.parent().parent();
     var index= parent.index();
-    console.log(lists[index]);
-    if(input.checked){
-        exportList.push(lists[index]);
+    if(input.attr('checked')){
+        exportList.push(lists.at(index));
     }else{
         for(var i = 0; i < exportList.length; i++){
-            if(lists[index] === exportList[i]){
-                exportList.pop(lists[i]);
+            if(lists.at(index) === exportList[i]){
+                console.log('entra por aqui');
+                exportList.splice(i, 1);
             }
         }
     }
