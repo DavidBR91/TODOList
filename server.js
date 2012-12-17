@@ -123,6 +123,8 @@ app.get('/list', ensureAuthenticated, list.showAll);
 
 app.get('/list/:listid', ensureAuthenticated, list.show);
 
+app.delete('/list/:listid', ensureAuthenticated, list.delete);
+
 app.post('/list/:listid/task', ensureAuthenticated, task.create);
 
 app.get('/list/:listid/task', ensureAuthenticated, task.showAll);

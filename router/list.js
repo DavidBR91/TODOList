@@ -90,4 +90,24 @@ exports.show = function (req, res) {
     });
 };
 
+exports.delete = function (req, res) {
+    List.findById(req.params.listid, function (error, list) {
+        if (error) {
+            res.json({ok:false, error:error});
+        }
+        else {
+            if (!list) {
+                res.json({ok:true, data:null}, 200);
+            }
+            else if (list.user.toString() === req.user.id) {
+                list.remove();
+                res.send(200);
+            }
+            else {
+                res.json({ok:false, error:"Not authorized"}, 401);
+            }
+        }
+    });
+};
+
 exports.List = List;
