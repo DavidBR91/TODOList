@@ -247,6 +247,15 @@
         });
 
 </script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://localhost');
+    socket.on('ready',function(){
+        console.log('emitir');
+        socket.emit('newTask', {user : 'fer', taskList : ["44234","fdsfsf"]});
+    });
+
+</script>
 
 </body>
 </html>

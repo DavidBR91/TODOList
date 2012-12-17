@@ -153,6 +153,10 @@ html, body {
     height: 100%;
 }
 
+.favoritesCont {
+    vertical-align: top!important;
+}
+
 .favoritesCont * {
     display: inline-block;
 }
