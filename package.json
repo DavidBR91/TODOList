@@ -16,6 +16,11 @@
         "passport-local": ">= 0.0.0",
         "mongoose" :"3.x.x",
         "underscore" : "1.4.2",
+        "redis" : "0.7.x",
+        "socket.io" : "0.9.x",
+        "node-uuid" : "1.4.0",
+        "passport.socketio" : "0.0.4",
+        "async" : "0.1.x"
     },
     "engines": {
         "node": "*"

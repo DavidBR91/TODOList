@@ -110,7 +110,7 @@
                     <input type="text" class="span2" id="inputLimitMonth" placeholder="0" size="1"
                            maxlength="2" max="12">
                     <input type="text" class="span2" id="inputLimitYear" placeholder="0" size="1"
-                           maxlength="2">
+                           maxlength="4">
                     (0/0/0=sin fecha limite)
                 </div>
             </div>
@@ -198,12 +198,11 @@
             </div>
 
         </div>
-        <div data-placement="right" rel="tooltip" title="<%= task.limitDate %>" id="task" href="#taskOptions" role="button"
-             data-name="<%= task.name%>" class="task-desc"
+        <div data-placement="right" rel="tooltip" title="<%= task.limitDate %>" href="#taskOptions" role="button"
+             data-name="<%= task.name%>" class="task-desc task"
              data-toggle="modal">
             <div class="favoritesCont">
-                <div class="name"><%= task.name %></div>
-                <div class="favicon"></div>
+                <div class="name"><%= task.name %><span class="favicon pull-right"></span> </div>
             </div>
             <div class="desc"><%= task.description %></div>
         </div>
@@ -227,7 +226,6 @@
             <option><%= list.name %></option>
             <% }); %>
         </select>
-
         <div class="listsLinks">
             <ul class="nav nav-list">
                 <% _.each(lists, function(list) { %>
@@ -246,6 +244,15 @@
             console.log("entra");
             exportLists();
         });
+
+</script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://localhost');
+    socket.on('ready',function(){
+        console.log('emitir');
+        socket.emit('newTask', {user : 'fer', taskList : ["44234","fdsfsf"]});
+    });
 
 </script>
 

@@ -111,7 +111,8 @@ html, body {
 .name {
     font-size: 20px;
     font-weight: bold;
-    line-height: 30px
+    line-height: 30px;
+    width: 100%;
 }
 
 .incompleted {
@@ -153,6 +154,11 @@ html, body {
     height: 100%;
 }
 
+.favoritesCont {
+    vertical-align: top!important;
+    width: 100%;
+}
+
 .favoritesCont * {
     display: inline-block;
 }
@@ -167,10 +173,9 @@ html, body {
 
 .favicon {
     width: 35px;
-    float: right;
     padding: 4px;
     background: url("/img/Star_Empty.png") no-repeat center;
-    background-size: 27px;
+    background-size: 30px;
 }
 
 .favicon:hover {

@@ -22,7 +22,7 @@ function changeList(list){
     var dropdownIndex=$('#dropdownLists').get(0).selectedIndex;
 	$('.active').removeClass('active');
 	$('#dropdownLists').removeClass('active');
-    $('.todoLists > .listsLinks > ul > li > a').each(function() {
+    $('.listElement').each(function() {
     	if(dropdownIndex==i++){
     		$(this).parent().addClass('active');
     	}
@@ -100,8 +100,6 @@ var ListsView=Backbone.View.extend({
         $('.listElement').on('click',function(event) {
 	    	var list=$(this).text();
 	    	$('#dropdownLists').val(list);
-	    	$(this).parent().parent().find('.active').removeClass('active');
-	    	$(this).parent().addClass('active');
 	    	changeList(list);
     	});
     	$('#dropdownLists').change(function() {
@@ -172,17 +170,18 @@ var TasksView=Backbone.View.extend({
 	    	var template = _.template( $("#taskRowTemplate").html(), {tasks: taskArray} );
 	    	this.$el.append( template );
       $('[rel=tooltip]').tooltip();
-    	$('#task').click(function() {
+    	$('.task').click(function() {
 		    var taskName = $(this).data('name');
 		    $('#inputTitle').val(taskName);
 		    $('#taskOptionsLabel').text(taskName);
 		    var tasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
 		    tasks.each(function(task) {
 		    	if(task.get('name')===taskName){
+		    		var date=new Date(task.get('expiration_date'));
 			    	inDes.val(task.get('description'));
-			    	inLimD.val(task.get('expiration_date').getDate());
-			    	inLimM.val(task.get('expiration_date').getMonth()+1);
-			      inLimY.val(task.get('expiration_date').getFullYear());
+			    	inLimD.val(date.getDate());
+			    	inLimM.val(date.getMonth()+1);
+			      inLimY.val(date.getFullYear());
 			    	inExpD.val(task.get('expectedDays'));
 			    	task.get('completed') ?  inComp.attr('checked', false) : inComp.attr('checked', true);
 		    	}
@@ -211,13 +210,16 @@ $(document).ready(function() {
 		    	var tasks=lists.at($('#dropdownLists').get(0).selectedIndex).get('tasks');
 		    	tasks.each(function(task) {
 			    	if(task.get('name')==$('#taskOptionsLabel').text()){
-			    		//task.set({name: $('#inputTitle').val(),description: $('#inputDescription').val(),limitYear: $('#inputLimitYear').val(),limitMonth: $('#inputLimitMonth').val(),limitDay: $('#inputLimitDay').val(),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')==false?0:1});
+			    		//task.set({name: $('#inputTitle').val(),description: $('#inputDescription').val(),expiration_date: new Date($('#inputLimitYear').val(),$('#inputLimitMonth').val()-1,$('#inputLimitDay').val(),0,0,0,0),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')?true:false});
 			    		console.log(task);
-			    		task.save({name: $('#inputTitle').val(),description: $('#inputDescription').val(),expiration_date: new Date($('#inputLimitYear').val(),$('#inputLimitMonth').val(),$('#inputLimitDay').val(),0,0,0,0),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')?true:false});
+			    		task.save({name: $('#inputTitle').val(),description: $('#inputDescription').val(),expiration_date: new Date($('#inputLimitYear').val(),$('#inputLimitMonth').val()-1,$('#inputLimitDay').val(),0,0,0,0),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')?true:false},{wait:false,success: function(model,response) { 
+			    			console.log(model);
+			    			console.log(response);
+			    		}});
 			    		$("#taskOptions").modal('hide');
-				    	return false;
+			    		console.log(task);
 			    	}
-		    	})
+		    	});
 		    });
 		    $('#submitNewListButton').on('click', function(e){
 		    	$('.newListForm').submit();

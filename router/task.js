@@ -10,9 +10,10 @@ var TaskSchema = new Schema({
   user:ObjectId,
   list:ObjectId,
   name:{type : String, required : true},
-  description:String,
+  description: {type: String, default : ''},
   creation_date: {type:Date, default:Date.now },
   expiration_date: {type : Date, required : false },
+  expectedDays: {type : Number, default: 0},
   completed : {type : Boolean, default : false},
   favorite : {type : Boolean, default : false}
 });
@@ -102,10 +103,10 @@ exports.show = function (req, res) {
 exports.update = function (req, res) {
   'use strict';
   Task.findById(req.params.taskid, function (err, task) {
-    var newAttributes;
+    //var newAttributes;
     // modify resource with allowed attributes
-    newAttributes = _.pick(req.body);
-    task = _.extend(task, newAttributes);
+    //newAttributes = _.pick(req.body);
+    task = _.extend(task, req.body);
     task.save(function (err) {
       if (!err) {
         res.json(task);
