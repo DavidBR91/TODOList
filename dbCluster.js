@@ -40,9 +40,9 @@ var createDB = function(socketIo){
         function(){
           centinell.publish('share:' + user,'new');
         });
-    })
+    });
   });
-}
+};
 
 var userConnected = function(socket,user){
   conUsers.push(user);
@@ -52,8 +52,8 @@ var userConnected = function(socket,user){
   client.subscribe('share:' + user);
   client.on('message',function(){
     showNotifications(user, socket);
-  })
-}
+  });
+};
 
 var showNotifications = function (user, socket){
   var notArray = [];

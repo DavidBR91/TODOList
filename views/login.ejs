@@ -31,8 +31,6 @@
             right: 0;
             z-index: 100;
             background: rgba(0, 0, 0, 0.8);
-            display: none;
-
         }
 
         .overlayContainer {
@@ -58,6 +56,10 @@
 
         }
 
+        .invisible {
+            visibility: hidden;
+        }
+
         .overlayContainer div {
             padding: 10px;
         }
@@ -66,7 +68,7 @@
 </head>
 
 <body>
-<div id="overlay" class="overlay">
+<div id="overlay" class="overlay invisible">
     <div class="overlayContainer">
         <div>
             <p>Autenticando, por favor espere...</p>
@@ -121,7 +123,7 @@
 <script type="text/javascript">
     $("form").submit(function () {
         setTimeout(function () {
-            $("#overlay").fadeIn();
+            $("#overlay").removeClass("invisible")
         }, 2000)
     })
 </script>
