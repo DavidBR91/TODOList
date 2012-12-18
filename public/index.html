@@ -18,6 +18,7 @@
 
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
     <link href="css/general.css" rel="stylesheet">
+    <link href="css/jquery.gritter.css" rel="stylesheet">
 
     <script type="text/javascript" src="js/jquery.tinyscrollbar.min.js"></script>
     <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -35,6 +36,7 @@
                     </a>
                     <a class="brand" href="#">TODOList</a>
                     <ul class="nav pull-right">
+                        <li><a href="#about"><i class="icon-envelope icon-white"></i> Notificaciones<span class="label label-important">5</span></a></li>
                         <li class="divider-vertical"></li>
 
                         <li><a href="/logout">Logout</a></li>
@@ -236,6 +238,7 @@
         </div>
     </div>
 </script>
+<script src="js/jquery.gritter.min.js"></script>
 <script src="js/general.js"></script>
 <script src="js/bootstrap.js"></script>
 <script type="text/javascript">
@@ -253,7 +256,29 @@
         console.log('emitir');
         socket.emit('newTask', {user : 'fer', taskList : ["44234","fdsfsf"]});
     });
+    socket.on('notification',function(notifications){
+       console.log(notifications);
+    });
+</script>
 
+<script>
+    message_welcome1();
+    function message_welcome1(){
+        var unique_id = $.gritter.add({
+            // (string | mandatory) the heading of the notification
+            title: 'Tienes notificaciones nuevas',
+            // (string | mandatory) the text inside the notification
+            text: 'I hope you like this template',
+            // (string | optional) the image to display on the left
+            image: 'img/notification.png',
+            // (bool | optional) if you want it to fade out on its own or just sit there
+            sticky: false,
+            // (int | optional) the time you want it to be alive for before fading out
+            time: '4000',
+            // (string | optional) the class name you want to apply to that specific message
+            class_name: 'my-sticky-class'
+        });
+    }
 </script>
 
 </body>

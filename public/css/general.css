@@ -134,6 +134,13 @@ html, body {
     background-position: -1px -912px;
 }
 
+.icon-big-envelope {
+    background-image: url("/img/glyphicons-big.png");
+    width: 26px;
+    height: 26px;
+    background-position: -1px -912px;
+}
+
 .listsLinks {
     height: 70%;
     overflow-y: scroll;
@@ -155,7 +162,7 @@ html, body {
 }
 
 .favoritesCont {
-    vertical-align: top!important;
+    vertical-align: top !important;
     width: 100%;
 }
 
@@ -181,4 +188,19 @@ html, body {
 .favicon:hover {
     background: url("/img/Star_Gold.png") no-repeat center;
     background-size: 27px;
+}
+
+.label {
+    vertical-align: middle;
+    padding: 1px 4px 1px;
+    margin: -2px 4px 0;
+    display: inline-block;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    background: #B94A48;
+}
+
+.nav i {
+    margin-top: 2px;
 }
