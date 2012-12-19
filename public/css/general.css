@@ -190,31 +190,33 @@ html, body {
     background-size: 27px;
 }
 
-.label {
-    vertical-align: middle;
-    padding: 1px 4px 1px;
-    margin: -2px 4px 0;
-    display: inline-block;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    border-radius: 50%;
-    background: #B94A48;
-}
-
-li .notification{
-    border-bottom: 2px;
-    border:#000000 solid
-}
 .nav i {
     margin-top: 2px;
 }
 
+li .notification {
+    border-bottom: 1px solid #E5E5E5;argin: 8px 1px;
+    margin-bottom: 6px;
+}
 li .notification a{
     width: 400px;
-    border-bottom: #000000;
-    border: 2px;
+}
+li .notification a:hover{
+    background: #ffffff!important;
+    color: #000000;
 }
 
 li .notification .description{
     padding-top: 10px;
+}
+
+.tiny{
+    line-height: 12px!important;
+}
+
+div .comprimed ul{
+    margin-left: 0;
+    max-height: 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
