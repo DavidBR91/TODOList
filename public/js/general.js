@@ -128,13 +128,14 @@ var handler = function(event) {
     var input = $(this);
     var parent = input.parent().parent();
     var index= parent.index();
-    console.log(lists[index]);
-    if(input.checked){
-        exportList.push(lists[index]);
+    console.log(index);
+    if(input.attr('checked')){
+        exportList.push(lists.at(index).toJSON());
     }else{
         for(var i = 0; i < exportList.length; i++){
-            if(lists[index] === exportList[i]){
-                exportList.pop(lists[i]);
+            if(lists.at(index) === exportList[i]){
+
+                exportList.splice(i, 1);
             }
         }
     }
@@ -265,8 +266,11 @@ $(document).ready(function() {
 
 var exportLists= function(){
     var txt ='';
-    for (var i = 0; i < exportList; i++) {
-        txt += exportList[i] + '\n';
+    console.log('entra');
+    console.log(exportList);
+    for (var i = 0; i < exportList.length; i++) {
+        console.log(exportList[i]);
+        txt += JSON.stringify(exportList[i]) + '\n';
     }
     window.open('data:download/plain;charset=utf-8,' + encodeURI(txt), '_blank');
 };
