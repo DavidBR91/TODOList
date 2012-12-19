@@ -36,7 +36,7 @@
                     </a>
                     <a class="brand" href="#">TODOList</a>
                     <ul class="nav pull-right">
-                        <li><a href="#about"><i class="icon-envelope icon-white"></i> Notificaciones<span class="label label-important">5</span></a></li>
+                        <li><a href="#about"><i class="icon-envelope icon-white"></i> Notificaciones <span id="num-notifications" class="badge badge-important">0</span></a></li>
                         <li class="divider-vertical"></li>
 
                         <li><a href="/logout">Logout</a></li>
@@ -244,7 +244,6 @@
 <script type="text/javascript">
 
         $('#exportList').click(function(){
-            console.log("entra");
             exportLists();
         });
 
@@ -252,18 +251,20 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
     var socket = io.connect('http://localhost');
-    socket.on('ready',function(){
-        socket.on
-        socket.emit('newTask', {user : 'fer', taskList : ["44234","fdsfsf"]});
+    $('#num-notifications').click(function(){
+        socket.emit('newTask', {user : 'peneanal', taskList : ["44234","fdsfsf"]});
     });
     socket.on('notification',function(notifications){
        console.log(notifications);
+        if (notifications.length > 0){
+            newNotification();
+        }
+        $('#num-notifications').text(notifications.length);
     });
 </script>
 
 <script>
-    message_welcome1();
-    function message_welcome1(){
+    function newNotification(){
         var unique_id = $.gritter.add({
             // (string | mandatory) the heading of the notification
             title: 'Tienes notificaciones nuevas',
