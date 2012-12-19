@@ -9,7 +9,9 @@ var sio;
 
 
 var userConnected = function (user,socket) {
+    console.log('user %s connected',user);
   if (!usersSockets.hasOwnProperty(user)) {
+      console.log('user %s connected',user);
     usersSockets[user] = socket;
     var client = redis.createClient();
     client.subscribe('share:' + user);
@@ -28,6 +30,7 @@ var userConnected = function (user,socket) {
 var createDB = function (socketIo) {
   sio = socketIo;
   sio.sockets.on("connection", function (socket) {
+      console.log('llega');
     userConnected(socket.handshake.user.username, socket);
     showNotifications(socket.handshake.user.username, socket);
     socket.on('newTask', function (message) {

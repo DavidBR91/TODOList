@@ -36,7 +36,33 @@
                     </a>
                     <a class="brand" href="#">TODOList</a>
                     <ul class="nav pull-right">
-                        <li><a href="#about"><i class="icon-envelope icon-white"></i> Notificaciones <span id="num-notifications" class="badge badge-important">0</span></a></li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#about"><i
+                                    class="icon-envelope icon-white"></i> Notificaciones <span id="num-notifications"
+                                                                                               class="badge badge-important">0</span></a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                <li class="notification">
+                                    <a style="width: 400px">
+                                        <div style="background: wheat;"><b>Fernando</b></div>
+                                        <p class="description">Te ha enviado una tarea lalal jajaj</p>
+                                        <p>
+                                            <button class="btn btn-mini btn-primary" type="button">Mini button</button>
+                                            <button class="btn btn-mini btn-danger" type="button">Mini button</button>
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="notification">
+                                    <a style="width: 400px">
+                                        <div style="background: wheat;"><b>Fernando</b></div>
+                                        <p class="description">Te ha enviado una tarea lalal jajaj</p>
+                                        <p>
+                                            <button class="btn btn-mini btn-primary" type="button">Mini button</button>
+                                            <button class="btn btn-mini btn-danger" type="button">Mini button</button>
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li class="divider-vertical"></li>
 
                         <li><a href="/logout">Logout</a></li>
@@ -49,13 +75,13 @@
         <div class="row-fluid tall">
             <div class="span3 tall">
                 <div class="sidewell todoLists tall">
-                <div id="listsWell" ></div>
-                <div class="listsAddDelete">
-                    <button id="exportList" class="btn btn-primary">Exportar Listas</button>
-                    <button href="#newList" class="btn btn-primary" data-toggle="modal">Nueva lista</button>
-                    <button id="deleteList" class="btn btn-danger">Borrar lista</button>
-                </div>
+                    <div id="listsWell"></div>
+                    <div class="listsAddDelete">
+                        <button id="exportList" class="btn btn-primary">Exportar Listas</button>
+                        <button href="#newList" class="btn btn-primary" data-toggle="modal">Nueva lista</button>
+                        <button id="deleteList" class="btn btn-danger">Borrar lista</button>
                     </div>
+                </div>
             </div>
             <div class="span9 tall">
                 <div class=" well todoTasks tall">
@@ -204,7 +230,7 @@
              data-name="<%= task.name%>" class="task-desc task"
              data-toggle="modal">
             <div class="favoritesCont">
-                <div class="name"><%= task.name %><span class="favicon pull-right"></span> </div>
+                <div class="name"><%= task.name %><span class="favicon pull-right"></span></div>
             </div>
             <div class="desc"><%= task.description %></div>
         </div>
@@ -228,6 +254,7 @@
             <option><%= list.name %></option>
             <% }); %>
         </select>
+
         <div class="listsLinks">
             <ul class="nav nav-list">
                 <% _.each(lists, function(list) { %>
@@ -243,33 +270,33 @@
 <script src="js/bootstrap.js"></script>
 <script type="text/javascript">
 
-        $('#exportList').click(function(){
-            exportLists();
-        });
+    $('#exportList').click(function () {
+        exportLists();
+    });
 
 </script>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    var socket = io.connect('http://localhost');
-    $('#num-notifications').click(function(){
-        socket.emit('newTask', {user : 'peneanal', taskList : ["44234","fdsfsf"]});
+    var socket = io.connect('http://192.168.1.59:3000');
+    $('#num-notifications').click(function () {
+        socket.emit('newTask', {user: 'peneanal', taskList: ["44234", "fdsfsf"]});
     });
-    socket.on('notification',function(notifications){
-       console.log(notifications);
-        if (notifications.length > 0){
-            newNotification();
+    socket.on('notification', function (notifications) {
+        console.log(notifications);
+        if (notifications.length > 0) {
+            newNotification(notifications.length);
         }
         $('#num-notifications').text(notifications.length);
     });
 </script>
 
 <script>
-    function newNotification(){
+    function newNotification(numNot) {
         var unique_id = $.gritter.add({
             // (string | mandatory) the heading of the notification
             title: 'Tienes notificaciones nuevas',
             // (string | mandatory) the text inside the notification
-            text: 'I hope you like this template',
+            text: numNot + ((numNot > 1) ? ' usuarios te enviaron un conjunto de tareas.' : ' usuario te envió un conjunto de tareas'),
             // (string | optional) the image to display on the left
             image: 'img/notification.png',
             // (bool | optional) if you want it to fade out on its own or just sit there

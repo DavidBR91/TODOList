@@ -201,6 +201,20 @@ html, body {
     background: #B94A48;
 }
 
+li .notification{
+    border-bottom: 2px;
+    border:#000000 solid
+}
 .nav i {
     margin-top: 2px;
+}
+
+li .notification a{
+    width: 400px;
+    border-bottom: #000000;
+    border: 2px;
+}
+
+li .notification .description{
+    padding-top: 10px;
 }
