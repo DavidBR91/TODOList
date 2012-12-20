@@ -38,10 +38,12 @@
                     <legend>TODOlist<span class="blue">Register</span></legend>
 
                     <div id="divCheckPasswordMatch" <% if (message.length>0) { %>class="alert error"<% } %>><%= message %></div>
-                    <div class="body">
+            <ul class="breadcrumb">
+                <li><a class='active'>Paso1</a> <span class='divider'>/</span></li>
+            </ul>
+            <div class="body">
                         <!-- first name -->
                         <span class="step" id="first">
-					<span class="font_normal_07em_black">Paso 1 - Datos personales</span><br/>
                             <br/>
 					<input name="name" type="text" class="input-block-level" placeholder="Nombre">
 					<input name="surname" type="text" class="input-block-level" placeholder="Apellidos">
@@ -51,7 +53,6 @@
                     <input name="city" type="text" class="input-block-level" placeholder="Ciudad">
 				</span>
 				<span id="second" class="step">
-					<span class="font_normal_07em_black">Paso 2 - Datos de usuario</span><br/>
                     <br/>
 					<input name="username" type="text" class="input-block-level" placeholder="Usuario">
                     <input name="password" type="password" class="input-block-level"
@@ -71,8 +72,8 @@
 
                     <div id="demoNavigation">
                         </br>
-                        <button class="btn btn-short btn-primary" type="reset">Anterior</button>
-                        <button class="btn btn-short btn-primary" type="submit">Siguiente</button>
+                        <button id="prev" class="btn btn-short btn-primary" type="reset">Anterior</button>
+                        <button id="next" class="btn btn-short btn-primary" type="submit">Siguiente</button>
                     </div>
                 </form>
             </div>
@@ -103,6 +104,22 @@
                     focusFirstInput:true
                 }
         );
+        $(function(){
+            // bind a callback to the step_shown event
+            $("#demoForm").bind("step_shown", function(event, data){
+                if(data.isFirstStep){
+                    $('.breadcrumb').html("<li><a class='active'>Paso1</a> <span class='divider'>/</span></li>");
+                }
+                else if(data.isLastStep){
+                    $('.breadcrumb').html("<li><a href='#'>Paso1</a> <span class='divider'>/</span></li>"+
+                    "<li><a class='active'>Paso1</a> <span class='divider'>/</span></li>");
+                    $('.breadcrumb li').first().children('a').click(function(){
+                        $("#demoForm").formwizard("back");
+                    })
+                }
+            });
+        });
+
     });
 </script>
 

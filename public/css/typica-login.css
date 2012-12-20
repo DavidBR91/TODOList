@@ -383,3 +383,7 @@ footer.navbar-fixed-bottom {
         margin: 0 auto;
     }
 }
+
+.active:hover {
+    text-decoration: none;
+}
