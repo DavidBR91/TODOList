@@ -9,7 +9,8 @@ var express = require('express')
   task = require('./router/task.js'),
   dbCluster = require('./dbCluster.js');
 
-mongoose.connect('mongodb://nodejitsu_fgodino:8ru9vs1qscaqbu9t46mmd0qovp@ds043947.mongolab.com:43947/nodejitsu_fgodino_nodejitsudb4271127104');
+//mongoose.connect('mongodb://nodejitsu_fgodino:8ru9vs1qscaqbu9t46mmd0qovp@ds043947.mongolab.com:43947/nodejitsu_fgodino_nodejitsudb4271127104');
+mongoose.connect('mongodb://localhost:27017/test2');
 user.localAuth(passport);
 
 var app = express(),
