@@ -219,6 +219,8 @@ var TasksViewFav = Backbone.View.extend({
 });
 
 var favList=new List({name: 'Favoritos', tasks: new TaskList('Favoritos')});
+var firstTask = favList.get('tasks').at(0);
+favList.get('tasks').remove(firstTask);
 
 var addFavorites = function(task){
   if(task.get('favorite')){

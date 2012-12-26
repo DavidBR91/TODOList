@@ -2,7 +2,7 @@
     "author": "Fernando Godino",
     "name": "TODOList",
     "description": "A TODO app with user support",
-    "version": "0.0.1",
+    "version": "0.0.1-1",
     "repository": {
         "type": "git",
         "url": "git://github.com/fgodino/TODOList.git"
@@ -14,15 +14,19 @@
         "ejs-locals": ">= 0.0.0",
         "passport": "*",
         "passport-local": ">= 0.0.0",
-        "mongoose" :"3.x.x",
-        "underscore" : "1.4.2",
-        "redis" : "0.7.x",
-        "socket.io" : "0.9.x",
-        "node-uuid" : "1.4.0",
-        "passport.socketio" : "0.0.4",
-        "async" : "0.1.x"
+        "mongoose": "3.x.x",
+        "underscore": "1.4.2",
+        "redis": "0.7.x",
+        "socket.io": "0.9.x",
+        "node-uuid": "1.4.0",
+        "passport.socketio": "0.0.4",
+        "async": "0.1.x"
     },
     "engines": {
         "node": "*"
+    },
+    "subdomain": "todolist",
+    "scripts": {
+        "start": "server.js"
     }
 }
