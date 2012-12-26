@@ -230,12 +230,6 @@
 </script>
 <script type="text/template" id="listsNavbar">
     <div class="tall" style="padding:10px">
-        <select class="span10" id="dropdownLists">
-            <% _.each(lists, function(list) { %>
-            <option><%= list.name %></option>
-            <% }); %>
-        </select>
-
         <div class="listsLinks">
             <ul class="nav nav-list">
                 <% _.each(lists, function(list) { %>
@@ -272,6 +266,8 @@
     </ul>
 </script>
 <script src="js/jquery.gritter.min.js"></script>
+<script src="js/views.js"></script>
+<script src="js/models.js"></script>
 <script src="js/general.js"></script>
 <script src="js/bootstrap.js"></script>
 <script type="text/javascript">
