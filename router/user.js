@@ -90,10 +90,8 @@ exports.register = function (req, done) {
           }
           else {
             var first_list = new list.List({user : user._id, name : "Lista principal" });
-            var fav_list = new list.List({user : user._id, name : "Favoritos"})
             first_list.save();
-            fav_list.save();
-            user.taskList.push(first_list,fav_list);
+            user.taskList.push(first_list);
             user.save();
             done(null, user);
           }

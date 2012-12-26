@@ -61,8 +61,6 @@ sio.set("authorization", passportSocketIo.authorize({
 
 dbCluster.createDB(sio);
 
-var desiredURL;
-
 app.get('/', ensureAuthenticated, function (req, res) {
   res.sendfile(__dirname + '/public/index.html');
 });
@@ -74,15 +72,9 @@ app.get('/login', function (req, res) {
 app.post('/login',
   passport.authenticate('local', { failureRedirect:'/login', failureFlash:true }),
   function (req, res) {
-    if (!desiredURL || desiredURL === '/login') {
-      res.redirect('/');
-    } else {
-      console.log(desiredURL);
       setTimeout(function () {
-        res.redirect(desiredURL);
+        res.redirect('/');
       }, 3000);
-
-    }
   });
 
 app.get('/logout', function (req, res) {
@@ -138,7 +130,6 @@ app.delete('/list/:listid/task/:taskid', ensureAuthenticated, task.delete);
 server.listen(3000);
 
 function ensureAuthenticated(req, res, next) {
-  desiredURL = req.path;
   if (req.isAuthenticated()) {
     return next();
   } else {

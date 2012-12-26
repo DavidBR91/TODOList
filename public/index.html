@@ -47,6 +47,7 @@
                         <li class="divider-vertical"></li>
 
                         <li><a href="/logout">Logout</a></li>
+                        <li><a href="#" ><i class="icon-cog icon-white"></i>Opciones</a></li>
                     </ul>
                 </div>
             </div>
@@ -57,10 +58,15 @@
             <div class="span3 tall">
                 <div class="sidewell todoLists tall">
                     <div id="listsWell"></div>
-                    <div class="listsAddDelete">
+                    <div class="container-fluid listsAddDelete">
+                        <div class="row-fluid">
+                            <button href="#newList" class="btn btn-primary" data-toggle="modal">Nueva lista</button>
+
+                            <button id="deleteList" class="btn btn-danger">Borrar lista</button>
+                            </div>
+                        <div class="row-fluid">
                         <button id="exportList" class="btn btn-primary">Exportar Listas</button>
-                        <button href="#newList" class="btn btn-primary" data-toggle="modal">Nueva lista</button>
-                        <button id="deleteList" class="btn btn-danger">Borrar lista</button>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -80,7 +86,7 @@
     margin-top: 10px;
 ">
         <div class="span12" style="float: left">
-            <footer>
+            <footer style="bottom: 0">
                 <div class="footerblk">
                     <p style="padding:20px; margin: 0">© 2012 <b> TodoList</b><span class="pull-right">IS2</span></p>
                 </div>
@@ -207,18 +213,23 @@
             </div>
 
         </div>
-        <div data-placement="right" rel="tooltip" title="<%= task.limitDate %>" href="#taskOptions" role="button"
+        <div data-placement="right" rel="tooltip" title="<%= task.limitDate %>" role="button"
              data-name="<%= task.name%>" class="task-desc task"
              data-toggle="modal">
-            <div class="favoritesCont">
-                <div class="name"><%= task.name %><span class="favicon pull-right"></span></div>
+            <div class="container-fluid header">
+            <div class="row-fluid">
+                <div class="span9"><div class="name"><%= task.name %></div></div>
+                <div class="span3"><a class="favicon pull-right <% if (task.favorite) { %> favorite <% } %>"></a></div>
             </div>
+            <div class="row-fluid">
             <div class="desc"><%= task.description %></div>
+               </div>
+                </div>
         </div>
     </div>
     <% }); %>
     <div class="box">
-        <div href="#newTaskModal" role="button" class="task completed addTask"
+        <div href="#newTaskModal" role="button" class="task addTask"
              data-toggle="modal">
             <div>
                 <h1 style="font-size : 50px;">+</h1>
@@ -226,6 +237,34 @@
             </a>
         </div>
     </div>
+
+</script>
+<script type="text/template" id="taskRowTemplate_Fav">
+    <% _.each(tasks, function(task) { %>
+    <div class="box">
+        <div class="task <% if (task.completed) {%>completed<%}else{%>incompleted<%}%>" data-toggle="modal"
+             data-name="<%= task.name %>">
+
+            <div>
+                <h3><%= task.name %></h3>
+                <h4><%= task.limitDate %></h4>
+            </div>
+
+        </div>
+        <div data-placement="right" rel="tooltip" title="<%= task.limitDate %>" role="button"
+             data-name="<%= task.name%>" class="task-desc task"
+             data-toggle="modal">
+            <div class="container-fluid header">
+                <div class="row-fluid">
+                    <div class="span9"><div class="name"><%= task.name %></div></div>
+                </div>
+                <div class="row-fluid">
+                    <div class="desc"><%= task.description %></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% }); %>
 
 </script>
 <script type="text/template" id="listsNavbar">
@@ -315,16 +354,17 @@
             var index = $(this).parents('li').index();
             var ObjID = notifications[index].listId;
             if ($(this).hasClass('accept')) {
-                console.log('true');
+                socket.emit('addList', ObjID);
+                notifications.splice(index, 1);
             }
             else {
                 socket.emit('deleteList', ObjID);
                 notifications.splice(index, 1);
                 $(this).parents('.notification').remove();
-                updateBar();
-                updateContent();
-                updateHandler()
             }
+            updateBar();
+            updateContent();
+            updateHandler();
         });
     }
 </script>

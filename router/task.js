@@ -20,8 +20,6 @@ var TaskSchema = new Schema({
 
 var Task = mongoose.model('Task', TaskSchema);
 
-console.log(TaskSchema);
-
 exports.create = function (req, res) {
   var name = req.body.name;
   list.List.findById(req.params.listid).populate('tasks')
@@ -73,6 +71,7 @@ exports.showAll = function (req, res) {
       if (!err) {
         if (list.user === req.user._id) {
           res.json(list.tasks);
+          console.log('envio: ' + list.tasks);
         }
         else {
           res.json({ok:false, error:"Not authorized"}, 401);
@@ -136,3 +135,5 @@ exports.delete = function (req, res) {
     }
   });
 };
+
+exports.Task = Task;
