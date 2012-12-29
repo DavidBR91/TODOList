@@ -71,7 +71,6 @@ exports.showAll = function (req, res) {
       if (!err) {
         if (list.user === req.user._id) {
           res.json(list.tasks);
-          console.log('envio: ' + list.tasks);
         }
         else {
           res.json({ok:false, error:"Not authorized"}, 401);

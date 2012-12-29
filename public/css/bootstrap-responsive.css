@@ -534,7 +534,7 @@
     }
 }
 
-@media (min-width: 768px) and (max-width: 979px) {
+@media (min-width: 830px) and (max-width: 979px) {
     .row {
         margin-left: -20px;
         *zoom: 1;
@@ -1074,7 +1074,7 @@
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 690px) {
     .nav-collapse {
         -webkit-transform: translate3d(0, 0, 0);
     }

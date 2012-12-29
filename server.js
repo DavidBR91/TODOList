@@ -108,7 +108,11 @@ app.post('/register', function (req, res) {
   });
 })
 
-app.get('/user', ensureAuthenticated, user.getAll);
+app.get('/user', ensureAuthenticated, user.get);
+
+app.post('/user', ensureAuthenticated, user.update);
+
+app.delete('/user', ensureAuthenticated, user.delete);
 
 app.post('/list', ensureAuthenticated, list.create);
 

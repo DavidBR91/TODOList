@@ -61,3 +61,7 @@ var TaskList=Backbone.Collection.extend({
     this.user=user;
   }
 });
+
+var User = Backbone.Model.extend({
+  url: '/user'
+});

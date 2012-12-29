@@ -18,7 +18,11 @@ var UserSchema = new Schema({
   answer:String,
   taskList:[
     {type:ObjectId, ref:"List"}
-  ]
+  ],
+  settings: {
+    tasks_per_page : {type : Number, default: 10},
+    default_list : {type : Number, default : 0}
+  }
 });
 
 var User = mongoose.model('User', UserSchema);
@@ -65,11 +69,26 @@ var localAuth = function (passport) {
     }
   ));
 };
-exports.getAll = function (req, res) {
-  User.find(function (err, users) {
-    res.send(_.omit(users, 'password', 'question', 'answer'));
+exports.get = function (req, res) {
+  User.findById(req.user.id,function (err, user) {
+    res.json(_.omit(user, ['password', 'question', 'answer']));
   });
 };
+
+exports.delete = function(req, res){
+    User.findByIdAndRemove(req.user.id, function(err, res){
+      res.send(200);
+    });
+};
+
+exports.update = function (req, res) {
+  'use strict';
+  User.findByIdAndUpdate(req.user.id, _.omit(req.body,'_id'),function (err, user) {
+    console.log(err);
+    res.json(user,200)
+  });
+};
+
 
 exports.register = function (req, done) {
 

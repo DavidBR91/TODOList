@@ -1,4 +1,6 @@
 var redis = require('redis');
+var mailer = require('./mailer.js');
+
 var createRedis = function (cb) {
   var client = redis.createClient(6379, 'nodejitsudb6172298819.redis.irstack.com');
   client.auth('nodejitsudb6172298819.redis.irstack.com:f327cfe980c971946e80b8e975fbebb4', function (err) {
@@ -36,13 +38,13 @@ var userConnected = function (user, socket) {
       });
       socket.on('deleteList', function (listId) {
         console.log('Deleting list from: ' + user);
+        doAction('rechazado', listId, user);
         deleteList(user, listId);
-        doAction('delete', listId, user);
       });
       socket.on('addList', function (listId) {
         console.log('Adding from: ' + user);
+        doAction('aceptado', listId, user);
         addList(user, listId);
-        doAction('add', listId, user);
       });
     });
   }
@@ -124,12 +126,15 @@ var showNotifications = function (user, socket) {
             var cmp = 0;
             for (var i = 0; i < tasks.length; i++) {
               var taskId = tasks[i];
+              console.log(taskId);
               task.Task.findById(taskId, 'name', function (err, task) {
-                notObj.taskList.push(task.name);
-                cmp++;
-                if (cmp === tasks.length) {
-                  notArray.push(notObj);
-                  cb();
+                if (task) {
+                  notObj.taskList.push(task.name);
+                  cmp++;
+                  if (cmp === tasks.length) {
+                    notArray.push(notObj);
+                    cb();
+                  }
                 }
               });
             }
@@ -196,7 +201,7 @@ var doAction = function (option, listId, recUser) {
     client.hget(listId, "user", function (err, sendingUser) {
       user.User.findOne({username:sendingUser}, function (err, userObj) {
         var email = userObj.email;
-
+        mailer.sendEmail(email, sendingUser, recUser, option);
       });
     });
   });

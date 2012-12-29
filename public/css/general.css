@@ -2,10 +2,24 @@ html, body {
     width: auto;
     margin: 0px;
     height: 100%;
+    min-height: 280px;
+}
+
+.index {
+    background: url("/img/wood-bg.jpg") center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 
 .padding0 {
     padding: 0;
+}
+
+#wrap
+{
+    min-height: 100%;
 }
 
 .todoLists .tasksList {
@@ -16,10 +30,11 @@ html, body {
 .todoLists {
     position: relative;
     min-width: 200px;
+    min-height: 280px;
 }
 
 .todoTasks {
-    overflow-y: scroll;
+    overflow-y: auto;
     position: relative;
     min-width: 200px;
 }
@@ -164,19 +179,39 @@ html, body {
 }
 
 .listsLinks {
-    height: 70%;
-    overflow-y: scroll;
+    max-height: 100%;
+    overflow-y: auto;
     background: #ffffff;
 }
 
-#dropdownLists {
-    width: 100%;
+.listsLinks a {
+    border-style: none solid solid;
+    border-width: 0 1px 1px;
+    border-color: #DDD;
+    color: #666;
+    display: block;
+    background-color: white;
+    padding: 0;
+}
+
+.listsLinks li{
+    line-height: 25px;
+}
+
+#listsWell {
+    height: 70%;
 }
 
 .listsAddDelete {
-    padding: 20px;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    position: absolute;
+    bottom: 0;
+    padding: 10px;
     margin: 0 auto;
     text-align: center;
+    width: 100%;
 }
 
 .tall {
@@ -248,4 +283,15 @@ div .comprimed ul{
     max-height: 250px;
     overflow-y: auto;
     overflow-x: hidden;
+}
+
+.sidebar {
+    width: 100px;
+    float: left;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 60px;
+    background-color: #F1F1F1;
+    border-right: 1px solid #E5E5E5;
 }
