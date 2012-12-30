@@ -9,8 +9,8 @@ var express = require('express')
   task = require('./router/task.js'),
   dbCluster = require('./dbCluster.js');
 
-//mongoose.connect('mongodb://nodejitsu_fgodino:8ru9vs1qscaqbu9t46mmd0qovp@ds043947.mongolab.com:43947/nodejitsu_fgodino_nodejitsudb4271127104');
-mongoose.connect('mongodb://localhost:27017/test2');
+mongoose.connect('mongodb://nodejitsu_fgodino:8ru9vs1qscaqbu9t46mmd0qovp@ds043947.mongolab.com:43947/nodejitsu_fgodino_nodejitsudb4271127104');
+//mongoose.connect('mongodb://localhost:27017/test2');
 user.localAuth(passport);
 
 var app = express(),
@@ -24,6 +24,7 @@ var MemoryStore = express.session.MemoryStore,
   sessionStore = new MemoryStore();
 // configure Express
 app.configure(function () {
+  app.use(express.favicon(__dirname + '/public/img/favicon.ico'));
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
   app.engine('ejs', require('ejs-locals'));

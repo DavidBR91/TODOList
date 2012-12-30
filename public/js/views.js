@@ -39,12 +39,6 @@ var ListsView = Backbone.View.extend({
     return this;
   }
 });
-var inDes = $('#inputDescription');
-var inLimD = $('#inputLimitDay');
-var inLimM = $('#inputLimitMonth');
-var inLimY = $('#inputLimitYear');
-var inComp = $('#inputCompleted');
-var inExpD = $('#inputExpectedDays');
 
 var TasksView = Backbone.View.extend({
   initialize:function () {
@@ -78,15 +72,16 @@ var TasksView = Backbone.View.extend({
       else {
         $('#taskOptions').modal('show')
         var taskName = $(this).data('name');
+        var date = new Date(task.get('expiration_date'));
         $('#inputTitle').val(taskName);
         $('#taskOptionsLabel').text(taskName);
-        var date = new Date(task.get('expiration_date'));
-        inDes.val(task.get('description'));
-        inLimD.val(date.getDate());
-        inLimM.val(date.getMonth() + 1);
-        inLimY.val(date.getFullYear());
-        inExpD.val(task.get('expectedDays'));
-        (task.get('completed')) ? inComp.attr('checked', true) : inComp.attr('checked', false);
+        $('#inputDescription').val(task.get('description'));
+        $('#inputLimitDay').val(date.getDate());
+        $('#inputLimitMonth').val(date.getMonth() + 1);
+        $('#inputLimitYear').val(date.getFullYear());
+        $('#inputCompleted').val(task.get('expectedDays'));
+        console.log(task.get('completed'));
+        (task.get('completed')) ? $('#inputCompleted').attr('checked', true) : $('#inputCompleted').attr('checked', false);
       }
     });
     return this;

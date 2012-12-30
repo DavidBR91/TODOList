@@ -76,7 +76,7 @@ exports.get = function (req, res) {
 };
 
 exports.delete = function(req, res){
-    User.findByIdAndRemove(req.user.id, function(err, res){
+    User.findByIdAndRemove(req.user.id, function(err, user){
       res.send(200);
     });
 };

@@ -84,7 +84,7 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="inputLimitDate">Fecha Límite</label>
+                <label class="control-label">Fecha Límite</label>
 
                 <div class="controls">
                     <input type="text" class="span2" id="inputLimitDay" placeholder="0" size="1"
@@ -168,12 +168,18 @@
 <script type="text/template" id="taskRowTemplate">
     <% _.each(tasks, function(task) { %>
     <div class="box">
-        <div class="task <% if (task.completed) {%>completed<%}else{%>incompleted<%}%>" data-toggle="modal"
+        <div class="task <% if (task.completed) {%>
+        completed
+        <%}else{ if (new Date(task.limitDate) > new Date()){%>
+        incompleted
+        <%} else {%>
+        expired
+        <% }} %>" data-toggle="modal"
              data-name="<%= task.name %>">
 
             <div>
                 <h3><%= task.name %></h3>
-                <h4><%= task.limitDate %></h4>
+                <h4><%= new Date(task.limitDate).format("dd/mm/yy") %></h4>
             </div>
 
         </div>
@@ -216,12 +222,18 @@
 <script type="text/template" id="taskRowTemplate_Fav">
     <% _.each(tasks, function(task) { %>
     <div class="box">
-        <div class="task <% if (task.completed) {%>completed<%}else{%>incompleted<%}%>" data-toggle="modal"
+        <div class="task <% if (task.completed) {%>
+        completed
+        <%}else{ if (new Date(task.limitDate) > new Date()){%>
+        incompleted
+        <%} else {%>
+        expired
+        <% }} %>" data-toggle="modal"
              data-name="<%= task.name %>">
 
             <div>
                 <h3><%= task.name %></h3>
-                <h4><%= task.limitDate %></h4>
+                <h4><%= new Date(task.limitDate).format("dd/mm/yy") %></h4>
             </div>
 
         </div>
