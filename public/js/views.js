@@ -55,15 +55,19 @@ var TasksView = Backbone.View.extend({
   render:function () {
     var taskArray = [];
     this.$el.empty();
-    this.model.each(function (task) {
+
+    var end = (this.options.end < this.model.length) ? this.options.end : this.model.length;
+
+    for(var i=this.options.start; i < end; i++){
+      var task = this.model.at(i);
       taskArray.push({name:task.get('name'), limitDate:task.get('expiration_date'), completed:task.get('completed'), description:task.get('description'), favorite:task.get('favorite')});
-    });
+    }
     var template = _.template($("#taskRowTemplate").html(), {tasks:taskArray});
     this.$el.append(template);
     $('[rel=tooltip]').tooltip();
     $('.task:not(.addTask)').bind("click tap touchend", function (event) {
       var $target = $(event.target);
-      var tasks = lists.at($('.active').index() / 2).get('tasks');
+      var tasks = lists.at($('.nav-list .active').index() / 2).get('tasks');
       var index = $(this).parents('.box').prevAll().length;
       var task = tasks.at(index);
       if ($target.is(".favicon")) {

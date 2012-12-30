@@ -47,9 +47,13 @@
                     <div class=" well todoTasks tall">
                         <div style="padding: 10px">
                             <div class="row-fluid">
-                                <div id="taskListTitle"></div>
-                                <div id="taskList"></div>
+                                <div class="span5">
+                                    <div id="taskListTitle"></div>
+                                </div>
+                                <div class="pagination pagination-centered span7">
+                                </div>
                             </div>
+                            <div id="taskList"></div>
                         </div>
                     </div>
                 </div>
@@ -202,6 +206,13 @@
     </div>
 
 </script>
+<script type="text/template" id="paginationTemplate">
+    <ul>
+        <% for(var i=1; i <= pages; i++) { %>
+        <li><a href="#"><%= i %></a></li>
+        <% } %>
+    </ul>
+</script>
 <script type="text/template" id="taskRowTemplate_Fav">
     <% _.each(tasks, function(task) { %>
     <div class="box">
@@ -214,7 +225,7 @@
             </div>
 
         </div>
-        <div data-placement="right" rel="tooltip" title="<%= task.limitDate %>" role="button"
+        <div data-placement="top" rel="tooltip" title="<%= task.limitDate %>" role="button"
              data-name="<%= task.name%>" class="task-desc task"
              data-toggle="modal">
             <div class="container-fluid header">
