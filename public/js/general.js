@@ -2,6 +2,8 @@ var lists = [];
 var listsView = [];
 var exportList = [];
 var user = new User();
+var lastChange = [];
+var offlineMode = false;
 
 function equalHeight(group) {
   var tallest = 0;
@@ -14,6 +16,22 @@ function equalHeight(group) {
   group.each(function () {
     $(this).height(tallest);
   });
+}
+function changeOfflineMode() {
+	if(!offlineMode){
+		offlineMode=true;
+	}else{
+		offlineMode=false;
+		lists.syncDirtyAndDestroyed();
+		lists.each(function(list) {
+			//list.get('tasks').syncDirtyAndDestroyed();
+			list.get('tasks').each(function(task) {
+				task.save();
+			});
+		});
+	}
+	alert(offlineMode);
+	return false;
 }
 function changeList(list) {
   $('#taskList').empty();
@@ -133,13 +151,10 @@ $(document).ready(function () {
         tasks.each(function (task) {
           if (task.get('name') == $('#taskOptionsLabel').text()) {
             //task.set({name: $('#inputTitle').val(),description: $('#inputDescription').val(),expiration_date: new Date($('#inputLimitYear').val(),$('#inputLimitMonth').val()-1,$('#inputLimitDay').val(),0,0,0,0),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')?true:false});
-            console.log(task);
-            task.save({name:$('#inputTitle').val(), description:$('#inputDescription').val(), expiration_date:new Date($('#inputLimitYear').val(), $('#inputLimitMonth').val() - 1, $('#inputLimitDay').val(), 0, 0, 0, 0), expectedDays:$('#inputExpectedDays').val(), completed:($('#inputCompleted').attr('checked')) ? true : false}, {wait:false, success:function (model, response) {
-              console.log(model);
-              console.log(response);
+            lastChange=['update',task,{name: task.get('name'),description: task.get('description'),expiration_date: task.get('expiration_date'), expectedDays: task.get('expectedDays'),completed: task.get('completed')}];
+            task.save({name:$('#inputTitle').val(), description:$('#inputDescription').val(), expiration_date:new Date($('#inputLimitYear').val(), $('#inputLimitMonth').val() - 1, $('#inputLimitDay').val(), 0, 0, 0, 0), expectedDays:$('#inputExpectedDays').val(), completed:($('#inputCompleted').attr('checked')) ? true : false}, {remote: !offlineMode, wait:false, success:function (model, response) {
             }});
             $("#taskOptions").modal('hide');
-            console.log(task);
           }
         });
       });
@@ -150,8 +165,9 @@ $(document).ready(function () {
         var newListName = $('#inputListName').val();
         $('#inputListName').val('')
         var newList = new List({name:newListName, tasks:new TaskList(newListName)});
+        lastChange=['create','list',newList];
         lists.add(newList);
-        newList.save();
+        newList.save({},{remote: !offlineMode});
         $("#newList").modal('hide');
         changeList(newListName);
       });
@@ -165,16 +181,18 @@ $(document).ready(function () {
         var listName = selectedList.get('name');
         var tasks = selectedList.get('tasks');
         var newTask = new Task({listid:selectedList.get('_id'), name:newTaskName});
+        lastChange=['create','task',newTask];
         tasks.add(newTask);
-        newTask.save();
+        newTask.save({},{remote: !offlineMode});
         $("#newTaskModal").modal('hide');
       });
       $('#removeButton').on('click', function (e) {
         var tasks = lists.at($('.nav-list .active').index() / 2).get('tasks');
         tasks.each(function (task) {
           if (task.get('name') == $('#taskOptionsLabel').text()) {
+          	lastChange=['delete',lists.at($('.nav-list .active').index() / 2),{name: task.get('name'),description: task.get('description'),expiration_date: task.get('expiration_date'), expectedDays: task.get('expectedDays'),completed: task.get('completed'), listid: lists.at($('.nav-list .active').index() / 2).get('_id')}];
             tasks.remove(task);
-            task.destroy();
+            task.destroy({remote: !offlineMode});
             $("#taskOptions").modal('hide');
             return false;
           }
@@ -194,3 +212,37 @@ var exportLists = function () {
   }
   window.open('data:download/plain;charset=utf-8,' + encodeURI(txt), '_blank');
 };
+var undoLastChange = function() {
+	alert(lastChange);
+	if(lastChange.length==0) return;
+	if(lastChange[0]=='update'){
+		lastChange[1].save(lastChange[2]);
+	}else if(lastChange[0]=='create'){
+		if(lastChange[1]=='task'){
+			lists.each(function(list) {
+				var tasks=list.get('tasks');
+				tasks.each(function(task) {
+					if(task.get('_id')==lastChange[2].get('_id'))
+						tasks.remove(lastChange[2]);
+				});
+			});
+		}else{
+			lists.remove(lastChange[2]);
+		}
+		lastChange[2].destroy();
+	}else if(lastChange[0]=='delete'){
+		if(lastChange[1]=='list'){
+			var list=new List(lastChange[1]);
+			lists.add(list);
+			list.save();
+		}else{
+			var task=new Task(lastChange[2]);
+			var tasks=lastChange[1].get('tasks');
+			tasks.add(task);
+			task.save();
+		}
+	}
+	lastChange=[];
+	listsView = new ListsView({el:$('#listsWell'), model:lists});
+    listsView.render();
+}
