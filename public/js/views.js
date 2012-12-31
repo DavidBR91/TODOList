@@ -22,8 +22,9 @@ var ListsView = Backbone.View.extend({
       }
       else {
         var list = lists.at(index);
+        lastChange=['delete','list',{name: list.get('name')}];
         lists.remove(list);
-        list.destroy();
+        list.destroy({remote: !offlineMode});
         $('.listElement').first().parent().addClass('active');
         changeList(lists.at(0).get('name'));
       }
