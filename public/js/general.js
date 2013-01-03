@@ -18,20 +18,22 @@ function equalHeight(group) {
   });
 }
 function changeOfflineMode() {
-	if(!offlineMode){
-		offlineMode=true;
-	}else{
-		offlineMode=false;
-		lists.syncDirtyAndDestroyed();
-		lists.each(function(list) {
-			//list.get('tasks').syncDirtyAndDestroyed();
-			list.get('tasks').each(function(task) {
-				task.save();
-			});
-		});
-	}
-	alert(offlineMode);
-	return false;
+  if (!offlineMode) {
+    offlineMode = true;
+    $('#status').html('<i class="status offline"/> Offline');
+  } else {
+    offlineMode = false;
+    lists.syncDirtyAndDestroyed();
+    lists.each(function (list) {
+      //list.get('tasks').syncDirtyAndDestroyed();
+      list.get('tasks').each(function (task) {
+        task.save();
+      });
+    });
+    $('#status').html('<i class="status online"/> Online');
+  }
+  alert(offlineMode);
+  return false;
 }
 function changeList(list) {
   $('#taskList').empty();
@@ -89,25 +91,29 @@ function showTasks(page) {
   tasksView.render();
 }
 
-
 var handler = function (event) {
   var input = $(this);
   var parent = input.parent().parent();
   var index = parent.index();
-  console.log(index);
+  var list;
+  list = lists.at(index).toJSON();
   if (input.attr('checked')) {
-    exportList.push(lists.at(index).toJSON());
+    exportList.push(list);
+    var tasks = list.tasks.toJSON();
+    var tasksaux = [];
+    for (var i = 0; i < tasks.length; i++) {
+      tasksaux.push('\n' + '\t' + '- ' + tasks[i].name + ': '
+        + tasks[i].description + '\n' + '\t' + '\t' + '- Fecha de expiración: ' + tasks[i].expiration_date + '\n');
+    }
+    exportList.push({name:list.name, tasks:tasksaux});
   } else {
     for (var i = 0; i < exportList.length; i++) {
-      if (lists.at(index) === exportList[i]) {
-
+      if (list.name === exportList[i].name) {
         exportList.splice(i, 1);
       }
     }
   }
-  console.log(exportList);
 };
-
 
 var favList = new List({name:'Favoritos', tasks:new TaskList('Favoritos')});
 var firstTask = favList.get('tasks').at(0);
@@ -135,7 +141,7 @@ $(document).ready(function () {
         inputs.eq(i).change(handler);
       });
       user.fetch({
-        success : function(user){
+        success:function (user) {
           var default_list = user.get('settings').default_list;
           changeList(lists.at(default_list).get('name'));
         }
@@ -151,10 +157,10 @@ $(document).ready(function () {
         tasks.each(function (task) {
           if (task.get('name') == $('#taskOptionsLabel').text()) {
             var date = $('#inputDate input').val().split('-');
-            var day = date[0], month = date[1]-1, year = date[2];
+            var day = date[0], month = date[1] - 1, year = date[2];
             //task.set({name: $('#inputTitle').val(),description: $('#inputDescription').val(),expiration_date: new Date($('#inputLimitYear').val(),$('#inputLimitMonth').val()-1,$('#inputLimitDay').val(),0,0,0,0),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')?true:false});
-            lastChange=['update',task,{name: task.get('name'),description: task.get('description'),expiration_date: task.get('expiration_date'), expectedDays: task.get('expectedDays'),completed: task.get('completed')}];
-            task.save({name:$('#inputTitle').val(), description:$('#inputDescription').val(), expiration_date: new Date(year,month,day), expectedDays:$('#inputExpectedDays').val(), completed:($('#inputCompleted').attr('checked')) ? true : false}, {remote: !offlineMode, wait:false, success:function (model, response) {
+            lastChange = ['update', task, {name:task.get('name'), description:task.get('description'), expiration_date:task.get('expiration_date'), expectedDays:task.get('expectedDays'), completed:task.get('completed')}];
+            task.save({name:$('#inputTitle').val(), description:$('#inputDescription').val(), expiration_date:new Date(year, month, day), expectedDays:$('#inputExpectedDays').val(), completed:($('#inputCompleted').attr('checked')) ? true : false}, {remote:!offlineMode, wait:false, success:function (model, response) {
             }});
             $("#taskOptions").modal('hide');
           }
@@ -167,9 +173,9 @@ $(document).ready(function () {
         var newListName = $('#inputListName').val();
         $('#inputListName').val('')
         var newList = new List({name:newListName, tasks:new TaskList(newListName)});
-        lastChange=['create','list',newList];
+        lastChange = ['create', 'list', newList];
         lists.add(newList);
-        newList.save({},{remote: !offlineMode});
+        newList.save({}, {remote:!offlineMode});
         $("#newList").modal('hide');
         changeList(newListName);
       });
@@ -183,68 +189,98 @@ $(document).ready(function () {
         var listName = selectedList.get('name');
         var tasks = selectedList.get('tasks');
         var newTask = new Task({listid:selectedList.get('_id'), name:newTaskName});
-        lastChange=['create','task',newTask];
+        lastChange = ['create', 'task', newTask];
         tasks.add(newTask);
-        newTask.save({},{remote: !offlineMode});
+        newTask.save({}, {remote:!offlineMode});
         $("#newTaskModal").modal('hide');
       });
       $('#removeButton').on('click', function (e) {
         var tasks = lists.at($('.nav-list .active').index() / 2).get('tasks');
         tasks.each(function (task) {
           if (task.get('name') == $('#taskOptionsLabel').text()) {
-          	lastChange=['delete',lists.at($('.nav-list .active').index() / 2),{name: task.get('name'),description: task.get('description'),expiration_date: task.get('expiration_date'), expectedDays: task.get('expectedDays'),completed: task.get('completed'), listid: lists.at($('.nav-list .active').index() / 2).get('_id')}];
+            lastChange = ['delete', lists.at($('.nav-list .active').index() / 2), {name:task.get('name'), description:task.get('description'), expiration_date:task.get('expiration_date'), expectedDays:task.get('expectedDays'), completed:task.get('completed'), listid:lists.at($('.nav-list .active').index() / 2).get('_id')}];
             tasks.remove(task);
-            task.destroy({remote: !offlineMode});
+            task.destroy({remote:!offlineMode});
             $("#taskOptions").modal('hide');
             return false;
           }
         })
       });
+      $("#shareModal").on('show', function () {
+        createTableShare(lists);
+      })
     }
   });
 });
 
 var exportLists = function () {
   var txt = '';
-  console.log('entra');
-  console.log(exportList);
   for (var i = 0; i < exportList.length; i++) {
-    console.log(exportList[i]);
-    txt += JSON.stringify(exportList[i]) + '\n';
+    for (var i = 0; i < exportList[i].tasks.length; i++) {
+
+    }
+    txt += '- ' + exportList[i].name + ': ' + exportList[i].tasks + '\n';
   }
   window.open('data:download/plain;charset=utf-8,' + encodeURI(txt), '_blank');
 };
-var undoLastChange = function() {
-	alert(lastChange);
-	if(lastChange.length==0) return;
-	if(lastChange[0]=='update'){
-		lastChange[1].save(lastChange[2]);
-	}else if(lastChange[0]=='create'){
-		if(lastChange[1]=='task'){
-			lists.each(function(list) {
-				var tasks=list.get('tasks');
-				tasks.each(function(task) {
-					if(task.get('_id')==lastChange[2].get('_id'))
-						tasks.remove(lastChange[2]);
-				});
-			});
-		}else{
-			lists.remove(lastChange[2]);
-		}
-		lastChange[2].destroy();
-	}else if(lastChange[0]=='delete'){
-		if(lastChange[1]=='list'){
-			var list=new List(lastChange[1]);
-			lists.add(list);
-			list.save();
-		}else{
-			var task=new Task(lastChange[2]);
-			var tasks=lastChange[1].get('tasks');
-			tasks.add(task);
-			task.save();
-		}
-	}
-	lastChange=[];
-	listsView = new ListsView({el:$('#listsWell'), model:lists});
-    listsView.render();
-}
+
+var createTableShare = function (lists) {
+  console.log(lists);
+  $("#shareTable tbody").html('');
+  lists.each(function (list) {
+    if (list.get('name') !== 'Favoritos') {
+      list.get('tasks').each(function (task) {
+        $("#shareTable tbody").append("<tr>" +
+          "<td><input class='checkTask' type='checkbox' data-id='" + task.get('_id') + "'/></td>" +
+          "<td>" + task.get('name') + "</td>" +
+          "<td>" + list.get('name') + "</td>" +
+          "</tr>")
+      });
+    }
+  });
+};
+
+var shareTasks = function () {
+  var checkedInputs = $('.checkTask:checked');
+  var inputsId = [];
+  for (var i = 0; i < checkedInputs.length; i++) {
+    inputsId.push($(checkedInputs[i]).attr('data-id'));
+  }
+  return inputsId;
+};
+
+var undoLastChange = function () {
+  alert(lastChange);
+  if (lastChange.length == 0) return;
+  if (lastChange[0] == 'update') {
+    lastChange[1].save(lastChange[2]);
+  } else if (lastChange[0] == 'create') {
+    if (lastChange[1] == 'task') {
+      lists.each(function (list) {
+        var tasks = list.get('tasks');
+        tasks.each(function (task) {
+          if (task.get('_id') == lastChange[2].get('_id'))
+            tasks.remove(lastChange[2]);
+        });
+      });
+    } else {
+      lists.remove(lastChange[2]);
+    }
+    lastChange[2].destroy();
+  } else if (lastChange[0] == 'delete') {
+    if (lastChange[1] == 'list') {
+      var list = new List(lastChange[1]);
+      lists.add(list);
+      list.save();
+    } else {
+      var task = new Task(lastChange[2]);
+      var tasks = lastChange[1].get('tasks');
+      tasks.add(task);
+      task.save();
+    }
+  }
+  lastChange = [];
+
+  listsView = new ListsView({el:$('#listsWell'), model:lists});
+  listsView.render();
+};

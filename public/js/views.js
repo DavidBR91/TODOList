@@ -61,6 +61,7 @@ var TasksView = Backbone.View.extend({
     this.$el.append(template);
     $('[rel=tooltip]').tooltip();
     $('.task:not(.addTask)').bind("click tap touchend", function (event) {
+
       var $target = $(event.target);
       var tasks = lists.at($('.nav-list .active').index() / 2).get('tasks');
       var index = $(this).parents('.box').prevAll().length;

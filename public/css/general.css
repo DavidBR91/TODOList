@@ -6,11 +6,7 @@ html, body {
 }
 
 .index {
-    background: url("/img/wood-bg.jpg") center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
+    background: url("/img/wood-bg.jpg") repeat;
 }
 
 .padding0 {
@@ -304,9 +300,24 @@ div .comprimed ul{
     display: inline-block;
     vertical-align: middle;
 }
-
 .shadowed {
     -webkit-box-shadow: 3px 2px 10px rgba(50, 50, 50, 0.75);
     -moz-box-shadow:    3px 2px 10px rgba(50, 50, 50, 0.75);
     box-shadow:         3px 2px 10px rgba(50, 50, 50, 0.75);
+
+}
+
+.status{
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    vertical-align: text-top;
+    background-repeat: no-repeat;
+}
+.online{
+    background-image: url("/img/green_light.png");
+}
+.offline{
+    background-image: url("/img/red_light.png");
 }
