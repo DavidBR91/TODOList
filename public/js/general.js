@@ -89,25 +89,30 @@ function showTasks(page) {
   tasksView.render();
 }
 
-
-var handler = function (event) {
-  var input = $(this);
-  var parent = input.parent().parent();
-  var index = parent.index();
-  console.log(index);
-  if (input.attr('checked')) {
-    exportList.push(lists.at(index).toJSON());
-  } else {
-    for (var i = 0; i < exportList.length; i++) {
-      if (lists.at(index) === exportList[i]) {
-
-        exportList.splice(i, 1);
-      }
+var handler = function(event) {
+    var input = $(this);
+    var parent = input.parent().parent();
+    var index= parent.index();
+    var list;
+    console.log(index);
+    list = lists.at(index).toJSON();
+    if(input.attr('checked')){
+        exportList.push(list);
+        var tasks = list.tasks.toJSON();
+        var tasksaux = [];
+        for(var i = 0; i < tasks.length; i++){
+            tasksaux.push('\n' + '\t'  + '- ' + tasks[i].name + ': '
+                + tasks[i].description + '\n' + '\t' + '\t' + '- Fecha de expiración: ' + tasks[i].expiration_date + '\n');
+        }
+        exportList.push({name: list.name, tasks: tasksaux});
+    }else{
+        for(var i = 0; i < exportList.length; i++){
+            if(list.name === exportList[i].name){
+                exportList.splice(i, 1);
+            }
+        }
     }
-  }
-  console.log(exportList);
 };
-
 
 var favList = new List({name:'Favoritos', tasks:new TaskList('Favoritos')});
 var firstTask = favList.get('tasks').at(0);
@@ -202,16 +207,17 @@ $(document).ready(function () {
   });
 });
 
-var exportLists = function () {
-  var txt = '';
-  console.log('entra');
-  console.log(exportList);
-  for (var i = 0; i < exportList.length; i++) {
-    console.log(exportList[i]);
-    txt += JSON.stringify(exportList[i]) + '\n';
-  }
-  window.open('data:download/plain;charset=utf-8,' + encodeURI(txt), '_blank');
+var exportLists = function(){
+    var txt ='';
+    for (var i = 0; i < exportList.length; i++) {
+        for(var i = 0; i < exportList[i].tasks.length; i++){
+
+        }
+        txt += '- ' + exportList[i].name + ': '+ exportList[i].tasks + '\n';
+    }
+    window.open('data:download/plain;charset=utf-8,' + encodeURI(txt), '_blank');
 };
+
 var undoLastChange = function() {
 	alert(lastChange);
 	if(lastChange.length==0) return;
