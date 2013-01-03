@@ -77,11 +77,9 @@ var TasksView = Backbone.View.extend({
         $('#inputTitle').val(taskName);
         $('#taskOptionsLabel').text(taskName);
         $('#inputDescription').val(task.get('description'));
-        $('#inputLimitDay').val(date.getDate());
-        $('#inputLimitMonth').val(date.getMonth() + 1);
-        $('#inputLimitYear').val(date.getFullYear());
+        $('#inputDate').datepicker({language:'es', weekStart: 1});
+        $('#inputDate').datepicker('setValue', date);
         $('#inputCompleted').val(task.get('expectedDays'));
-        console.log(task.get('completed'));
         (task.get('completed')) ? $('#inputCompleted').attr('checked', true) : $('#inputCompleted').attr('checked', false);
       }
     });

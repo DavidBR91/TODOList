@@ -19,7 +19,7 @@
                                      aria-labelledby="dLabel"></div>
                             </li>
                             <li class="divider-vertical"></li>
-                        	<li><a onclick="changeOfflineMode()">Modo Offline</a></li>
+                            <li><a onclick="changeOfflineMode()">Modo Offline</a></li>
                             <li><a href="/logout">Logout</a></li>
                             <li><a href="/#/admin/user"><i class="icon-cog icon-white"></i>Opciones</a></li>
                         </ul>
@@ -88,13 +88,10 @@
                 <label class="control-label">Fecha Límite</label>
 
                 <div class="controls">
-                    <input type="text" class="span2" id="inputLimitDay" placeholder="0" size="1"
-                           maxlength="2" max="31">
-                    <input type="text" class="span2" id="inputLimitMonth" placeholder="0" size="1"
-                           maxlength="2" max="12">
-                    <input type="text" class="span2" id="inputLimitYear" placeholder="0" size="1"
-                           maxlength="4">
-                    (0/0/0=sin fecha limite)
+                    <div class="input-append date" id="inputDate" data-date="" data-date-format="dd-mm-yyyy">
+                        <input class="span2" size="16" type="text" value="">
+                        <span class="add-on"><i class="icon-th"></i></span>
+                    </div>
                 </div>
             </div>
             <div class="control-group">
@@ -171,7 +168,7 @@
     <div class="box">
         <div class="task <% if (task.completed) {%>
         completed
-        <%}else{ if (new Date(task.limitDate) > new Date()){%>
+        <%}else{ if (new Date(task.limitDate).valueOf() >= (new Date().valueOf() + 86400)){%>
         incompleted
         <%} else {%>
         expired
@@ -184,7 +181,7 @@
             </div>
 
         </div>
-        <div data-placement="top" rel="tooltip" title="<%= task.limitDate %>" role="button"
+        <div data-placement="top" rel="tooltip" title="<%= new Date(task.limitDate).format('dd/mm/yy') %>" role="button"
              data-name="<%= task.name%>" class="task-desc task"
              data-toggle="modal">
             <div class="container-fluid header">
@@ -225,7 +222,7 @@
     <div class="box">
         <div class="task <% if (task.completed) {%>
         completed
-        <%}else{ if (new Date(task.limitDate) > new Date()){%>
+        <%}else{ if (new Date(task.limitDate).valueOf() >= (new Date().valueOf() + 86400)) {%>
         incompleted
         <%} else {%>
         expired
@@ -238,7 +235,7 @@
             </div>
 
         </div>
-        <div data-placement="top" rel="tooltip" title="<%= task.limitDate %>" role="button"
+        <div data-placement="top" rel="tooltip" title="<%= new Date(task.limitDate).format('dd/mm/yy') %>" role="button"
              data-name="<%= task.name%>" class="task-desc task"
              data-toggle="modal">
             <div class="container-fluid header">

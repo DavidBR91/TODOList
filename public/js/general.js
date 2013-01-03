@@ -150,9 +150,11 @@ $(document).ready(function () {
         var tasks = lists.at($('.nav-list .active').index() / 2).get('tasks');
         tasks.each(function (task) {
           if (task.get('name') == $('#taskOptionsLabel').text()) {
+            var date = $('#inputDate input').val().split('-');
+            var day = date[0], month = date[1]-1, year = date[2];
             //task.set({name: $('#inputTitle').val(),description: $('#inputDescription').val(),expiration_date: new Date($('#inputLimitYear').val(),$('#inputLimitMonth').val()-1,$('#inputLimitDay').val(),0,0,0,0),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')?true:false});
             lastChange=['update',task,{name: task.get('name'),description: task.get('description'),expiration_date: task.get('expiration_date'), expectedDays: task.get('expectedDays'),completed: task.get('completed')}];
-            task.save({name:$('#inputTitle').val(), description:$('#inputDescription').val(), expiration_date:new Date($('#inputLimitYear').val(), $('#inputLimitMonth').val() - 1, $('#inputLimitDay').val(), 0, 0, 0, 0), expectedDays:$('#inputExpectedDays').val(), completed:($('#inputCompleted').attr('checked')) ? true : false}, {remote: !offlineMode, wait:false, success:function (model, response) {
+            task.save({name:$('#inputTitle').val(), description:$('#inputDescription').val(), expiration_date: new Date(year,month,day), expectedDays:$('#inputExpectedDays').val(), completed:($('#inputCompleted').attr('checked')) ? true : false}, {remote: !offlineMode, wait:false, success:function (model, response) {
             }});
             $("#taskOptions").modal('hide');
           }
