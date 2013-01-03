@@ -7,6 +7,11 @@
                         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                         </a>
                         <a class="brand" href="#">TODOList</a>
+                        <ul class="nav pull-left">
+                            <li>
+                                <a id="status" href="#" onclick="changeOfflineMode()">
+                                <i class="status online"/> Online</a></li>
+                        </ul>
                         <ul class="nav pull-right">
                             <li><a onclick="shareTask()"><i class="icon-share icon-white"></i>Compartir</a></li>
                             <li class="divider-vertical"></li>
@@ -21,7 +26,6 @@
                                      aria-labelledby="dLabel"></div>
                             </li>
                             <li class="divider-vertical"></li>
-                        	<li><a onclick="changeOfflineMode()">Modo Offline</a></li>
                             <li><a href="/logout">Logout</a></li>
                             <li class="divider-vertical"></li>
                             <li><a href="/#/admin/user"><i class="icon-cog icon-white"></i>Opciones</a></li>

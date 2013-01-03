@@ -133,7 +133,7 @@ app.put('/list/:listid/task/:taskid', ensureAuthenticated, task.update);
 
 app.delete('/list/:listid/task/:taskid', ensureAuthenticated, task.delete);
 
-server.listen(8080);
+server.listen(3000);
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
