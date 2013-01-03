@@ -13,7 +13,7 @@
                                 <i class="status online"/> Online</a></li>
                         </ul>
                         <ul class="nav pull-right">
-                            <li><a onclick="shareTask()"><i class="icon-share icon-white"></i>Compartir</a></li>
+                            <li><a href="#shareModal" data-toggle="modal"><i class="icon-share icon-white"></i>Compartir</a></li>
                             <li class="divider-vertical"></li>
                             <li><a onclick="undoLastChange()">Deshacer</a></li>
                             <li class="dropdown">
@@ -173,6 +173,27 @@
         <button class="btn btn-primary" id="submitNewTaskButton">Guardar</button>
     </div>
 </div>
+<div id="shareModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Compartir Tareas</h3>
+    </div>
+    <div class="modal-body">
+        <table class="table table-hover" id="shareTable">
+            <thead>
+                <th></th>
+                <th>Tarea</th>
+                <th>Lista</th>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <input id="shareUser" type="text" placeholder="Usuario">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+        <button id="share" class="btn btn-primary">Compartir</button>
+    </div>
+</div>
 <script type="text/template" id="taskRowTemplate">
     <% _.each(tasks, function(task) { %>
     <div class="box">
@@ -310,8 +331,8 @@
 <script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
     var socket = io.connect();
-    $('#num-notifications').click(function () {
-        //socket.emit('newTask', {user:'peneanal', taskList:["44234", "fdsfsf"]});
+    $('#share').click(function () {
+        socket.emit('newTask', {user:$('#shareUser').val(), taskList: shareTasks()});
     });
 
     var notifications = [];
@@ -338,11 +359,13 @@
 
     function updateHandler() {
         $('#notifications-list li button').click(function () {
-            var index = $(this).parents('li').index();
+            var index = $(this).parents('.notification').index();
+            console.log($(this).parents('li'));
             var ObjID = notifications[index].listId;
             if ($(this).hasClass('accept')) {
                 socket.emit('addList', ObjID);
                 notifications.splice(index, 1);
+                location.reload();
             }
             else {
                 socket.emit('deleteList', ObjID);

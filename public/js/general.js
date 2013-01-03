@@ -20,7 +20,6 @@ function equalHeight(group) {
 function changeOfflineMode() {
     if (!offlineMode) {
         offlineMode = true;
-
         $('#status').html('<i class="status offline"/> Offline');
     } else {
         offlineMode = false;
@@ -87,7 +86,7 @@ function showTasks(page) {
         var tasksView = new TasksViewFav({start: start, end: end, el: $('#taskList'), model: modelTasks});
     }
     else {
-        var tasksView = new TasksView({start: start, end: end, el: $('#taskList'), model: modelTasks});
+        var tasksView = new TasksViewFav({start:start, end:end, el:$('#taskList'), model:modelTasks});
     }
     tasksView.render();
 }
@@ -97,7 +96,6 @@ var handler = function (event) {
     var parent = input.parent().parent();
     var index = parent.index();
     var list;
-    console.log(index);
     list = lists.at(index).toJSON();
     if (input.attr('checked')) {
         exportList.push(list);
@@ -134,9 +132,9 @@ var removeFavorites = function (task) {
 $(document).ready(function () {
     lists = new Lists();
     lists.fetch({
-        success: function () {
+        success:function () {
             lists.add(favList);
-            listsView = new ListsView({el: $('#listsWell'), model: lists});
+            listsView = new ListsView({el:$('#listsWell'), model:lists});
             listsView.render();
             var inputs = $('.nav-list').find('input');
             inputs.each(function (i) {
@@ -206,6 +204,9 @@ $(document).ready(function () {
                     }
                 })
             });
+            $("#shareModal").on('show', function () {
+                createTableShare(lists);
+            })
         }
     });
 });
@@ -219,6 +220,31 @@ var exportLists = function () {
         txt += '- ' + exportList[i].name + ': ' + exportList[i].tasks + '\n';
     }
     window.open('data:download/plain;charset=utf-8,' + encodeURI(txt), '_blank');
+};
+
+var createTableShare = function (lists) {
+    console.log(lists);
+    $("#shareTable tbody").html('');
+    lists.each(function (list) {
+        if (list.get('name') !== 'Favoritos') {
+            list.get('tasks').each(function (task) {
+                $("#shareTable tbody").append("<tr>" +
+                    "<td><input class='checkTask' type='checkbox' data-id='" + task.get('_id') + "'/></td>" +
+                    "<td>" + task.get('name') + "</td>" +
+                    "<td>" + list.get('name') + "</td>" +
+                    "</tr>")
+            });
+        }
+    });
+};
+
+var shareTasks = function () {
+    var checkedInputs = $('.checkTask:checked');
+    var inputsId = [];
+    for (var i = 0; i < checkedInputs.length; i++) {
+        inputsId.push($(checkedInputs[i]).attr('data-id'));
+    }
+    return inputsId;
 };
 
 var undoLastChange = function () {
@@ -252,6 +278,7 @@ var undoLastChange = function () {
         }
     }
     lastChange = [];
-    listsView = new ListsView({el: $('#listsWell'), model: lists});
+
+    listsView = new ListsView({el:$('#listsWell'), model:lists});
     listsView.render();
-}
+};
