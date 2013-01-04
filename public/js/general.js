@@ -32,7 +32,6 @@ function changeOfflineMode() {
     });
     $('#status').html('<i class="status online"/> Online');
   }
-  alert(offlineMode);
   return false;
 }
 function changeList(list) {
@@ -59,6 +58,12 @@ function changeList(list) {
       showTasks(0);
     }
   });
+}
+
+function showUndoMessage (message) {
+	$("#alert-area").empty();
+    $("#alert-area").append($("<div class='alert-message alert-success fade in' data-alert><p> " + message + ". <a onclick='undoLastChange()'>Deshacer</a> </p></div>"));
+    $(".alert-message").delay(7000).fadeOut("slow", function () { $(this).remove(); });
 }
 
 function paginationHandler() {
@@ -132,6 +137,7 @@ $(document).ready(function () {
             var day = date[0], month = date[1] - 1, year = date[2];
             //task.set({name: $('#inputTitle').val(),description: $('#inputDescription').val(),expiration_date: new Date($('#inputLimitYear').val(),$('#inputLimitMonth').val()-1,$('#inputLimitDay').val(),0,0,0,0),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')?true:false});
             lastChange = ['update', task, {name:task.get('name'), description:task.get('description'), expiration_date:task.get('expiration_date'), expectedDays:task.get('expectedDays'), completed:task.get('completed')}];
+            showUndoMessage ("La modificacion de la tarea '"+$('#inputTitle').val()+"' se ha completado");
             task.save({name:$('#inputTitle').val(), description:$('#inputDescription').val(), expiration_date:new Date(year, month, day), expectedDays:$('#inputExpectedDays').val(), completed:($('#inputCompleted').attr('checked')) ? true : false}, {remote:!offlineMode, wait:false, success:function (model, response) {
             }});
             $("#taskOptions").modal('hide');
@@ -146,6 +152,7 @@ $(document).ready(function () {
         $('#inputListName').val('')
         var newList = new List({name:newListName, tasks:new TaskList(newListName)});
         lastChange = ['create', 'list', newList];
+        showUndoMessage ("La creacion de la lista '"+newListName+"' se ha completado");
         lists.add(newList);
         newList.save({}, {remote:!offlineMode});
         $("#newList").modal('hide');
@@ -162,6 +169,7 @@ $(document).ready(function () {
         var tasks = selectedList.get('tasks');
         var newTask = new Task({listid:selectedList.get('_id'), name:newTaskName});
         lastChange = ['create', 'task', newTask];
+        showUndoMessage ("La creacion de la tarea '"+newTaskName+"' se ha completado");
         tasks.add(newTask);
         newTask.save({}, {remote:!offlineMode});
         $("#newTaskModal").modal('hide');
@@ -171,6 +179,7 @@ $(document).ready(function () {
         tasks.each(function (task) {
           if (task.get('name') == $('#taskOptionsLabel').text()) {
             lastChange = ['delete', lists.at($('.nav-list .active').index()), {name:task.get('name'), description:task.get('description'), expiration_date:task.get('expiration_date'), expectedDays:task.get('expectedDays'), completed:task.get('completed'), listid:lists.at($('.nav-list .active').index()).get('_id')}];
+            showUndoMessage ("El borrado de la tarea '"+task.get('name')+"' se ha completado");
             tasks.remove(task);
             task.destroy({remote:!offlineMode});
             $("#taskOptions").modal('hide');
@@ -232,8 +241,9 @@ var shareTasks = function () {
 };
 
 var undoLastChange = function () {
-  alert(lastChange);
+  $("#alert-area").empty();
   if (lastChange.length == 0) return;
+  var selList=$('.nav-list .active').index() / 2;
   if (lastChange[0] == 'update') {
     lastChange[1].save(lastChange[2]);
   } else if (lastChange[0] == 'create') {
@@ -265,4 +275,8 @@ var undoLastChange = function () {
 
   listsView = new ListsView({el:$('#listsWell'), model:lists});
   listsView.render();
+  if(typeof lists.at(selList)!='undefined')
+    	changeList(lists.at(selList).get('name'));
+    else
+        changeList(lists.at(0).get('name'));
 };
