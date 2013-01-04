@@ -330,6 +330,7 @@
     var socket = io.connect();
     $('#share').click(function () {
         socket.emit('newTask', {user:$('#shareUser').val(), taskList:shareTasks()});
+        $('#shareModal').modal('hide');
     });
 
     var notifications = [];
@@ -372,6 +373,7 @@
             updateBar();
             updateContent();
             updateHandler();
+            changeList(lists.at(0).get('name'));
         });
     }
 </script>

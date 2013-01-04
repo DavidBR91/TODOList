@@ -199,8 +199,13 @@
     }
 
     $('#continue').bind('click', function () {
-        Backbone.sync("delete",user);
-        location.replace('/');
+        $.ajax({
+            type: "DELETE",
+            url: "/user",
+            success: function(){
+                location.replace('/');
+            }
+        });
     });
 
 </script>
