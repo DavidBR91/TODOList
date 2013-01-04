@@ -2,8 +2,8 @@ var redis = require('redis');
 var mailer = require('./mailer.js');
 
 var createRedis = function (cb) {
-    var client = redis.createClient(6379, 'nodejitsudb6172298819.redis.irstack.com');
-    client.auth('nodejitsudb6172298819.redis.irstack.com:f327cfe980c971946e80b8e975fbebb4', function (err) {
+    var client = redis.createClient(6379, 'nodejitsudb5789650625.redis.irstack.com');
+    client.auth('nodejitsudb5789650625.redis.irstack.com:f327cfe980c971946e80b8e975fbebb4', function (err) {
         if (err) {
             throw err;
         }
@@ -61,32 +61,38 @@ var createDB = function (socketIo) {
             var taskInfo = 'TI:' + uuid.v4();
 
             var arr = message.taskList;
-            var user = message.user;
+            var userStr = message.user;
 
-            if (message.user && message.taskList) {
-                createRedis(function (centinell) {
+            user.User.findOne({username: userStr}, function (err, userObj) {
+                if (!err && userObj) {
+                    var user = userObj.username;
+                    createRedis(function (centinell) {
 
-                    async.parallel([
-                        function (callback) {
-                            async.forEach(arr, function (item, cb) {
-                                centinell.sadd(taskList, item, cb);
-                            }, callback);
-                        },
-                        function (callback) {
-                            centinell.hset(taskInfo, 'user', socket.handshake.user.username, callback);
-                        },
-                        function (callback) {
-                            centinell.hset(taskInfo, 'TL', taskList, callback);
-                        },
-                        function (callback) {
-                            centinell.rpush('share:' + user, taskInfo, callback);
-                        }
-                    ],
-                        function () {
-                            centinell.publish('share:' + user, 'new');
-                        });
-                });
-            }
+                        async.parallel([
+                            function (callback) {
+                                async.forEach(arr, function (item, cb) {
+                                    centinell.sadd(taskList, item, cb);
+                                }, callback);
+                            },
+                            function (callback) {
+                                centinell.hset(taskInfo, 'user', socket.handshake.user.username, callback);
+                            },
+                            function (callback) {
+                                centinell.hset(taskInfo, 'TL', taskList, callback);
+                            },
+                            function (callback) {
+                                centinell.rpush('share:' + user, taskInfo, callback);
+                            }
+                        ],
+                            function () {
+                                centinell.publish('share:' + user, 'new');
+                            });
+                    });
+                }
+                else {
+                    console.log('el usuario no existe');
+                }
+            });
         });
     });
 };
@@ -170,7 +176,6 @@ var deleteList = function (userList, listId) {
 var addList = function (userList, listId) {
 
     createRedis(function (client) {
-
         client.hget(listId, "TL", function (err, taskList) {
             client.smembers(taskList, function (err, tasks) {
                 user.User.findOne({username: userList}).populate('taskList')
@@ -202,7 +207,7 @@ var doAction = function (option, listId, recUser) {
     createRedis(function (client) {
         client.hget(listId, "user", function (err, sendingUser) {
             user.User.findOne({username: sendingUser}, function (err, userObj) {
-                if (!err && userObj.email) {
+                if (!err && userObj) {
                     var email = userObj.email;
                     mailer.sendEmail(email, sendingUser, recUser, option);
                 }

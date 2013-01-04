@@ -53,7 +53,8 @@ exports.create = function (req, res) {
         res.json({ok:false, error:'Already exists'});
       }
     });
-}
+};
+
 function saveInList(clist, task) {
   console.log(clist);
   list.List.update({_id:clist.id}, {$push:{tasks:task._id}}, function (err) {
@@ -63,7 +64,8 @@ function saveInList(clist, task) {
       console.log("Successfully added");
     }
   });
-};
+}
+
 
 exports.showAll = function (req, res) {
   list.List.findById(req.params.listid).populate('tasks')
@@ -125,6 +127,7 @@ exports.delete = function (req, res) {
         res.json({ok:true, data:null}, 200);
       }
       else if (task.user.toString() === req.user.id && task.list.toString() === req.params.listid) {
+        deleteInList(req.params.listid, task);
         task.remove();
         res.send(200);
       }
@@ -133,6 +136,18 @@ exports.delete = function (req, res) {
       }
     }
   });
+
+  function deleteInList(clist, task) {
+        console.log(clist);
+        list.List.findById(clist, function (err, list) {
+            if (err) {
+                console.log(err);
+            } else {
+                list.tasks.remove(task._id);
+                list.save();
+            }
+        });
+  }
 };
 
 exports.Task = Task;
