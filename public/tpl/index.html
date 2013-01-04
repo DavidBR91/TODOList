@@ -7,8 +7,14 @@
                         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                         </a>
                         <a class="brand" href="#">TODOList</a>
+                        <ul class="nav pull-left">
+                            <li>
+                                <a id="status" href="#" onclick="changeOfflineMode()">
+                                    <i class="status online"/> Online</a></li>
+                        </ul>
                         <ul class="nav pull-right">
-                            <li><a href="#shareModal" data-toggle="modal"><i class="icon-share icon-white"></i>Compartir</a></li>
+                            <li><a href="#shareModal" data-toggle="modal"><i class="icon-share icon-white"></i>Compartir</a>
+                            </li>
                             <li class="divider-vertical"></li>
                             <li><a onclick="undoLastChange()">Deshacer</a></li>
                             <li class="dropdown">
@@ -21,7 +27,6 @@
                                      aria-labelledby="dLabel"></div>
                             </li>
                             <li class="divider-vertical"></li>
-                        	<li><a onclick="changeOfflineMode()">Modo Offline</a></li>
                             <li><a href="/logout">Logout</a></li>
                             <li class="divider-vertical"></li>
                             <li><a href="/#/admin/user"><i class="icon-cog icon-white"></i>Opciones</a></li>
@@ -32,7 +37,7 @@
         </div>
         <div class="container-fluid" style="height: 80%">
             <div class="row-fluid tall">
-                <div class="span3 sidewell tall">
+                <div class="span3 sidewell tall shadowed">
                     <div class="todoLists tall">
                         <div id="listsWell" class="tall"></div>
                         <div class="container-fluid listsAddDelete">
@@ -47,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="span9 tall">
+                <div class="span9 tall shadowed">
                     <div class=" well todoTasks tall">
                         <div style="padding: 10px">
                             <div class="row-fluid">
@@ -91,13 +96,10 @@
                 <label class="control-label">Fecha Límite</label>
 
                 <div class="controls">
-                    <input type="text" class="span2" id="inputLimitDay" placeholder="0" size="1"
-                           maxlength="2" max="31">
-                    <input type="text" class="span2" id="inputLimitMonth" placeholder="0" size="1"
-                           maxlength="2" max="12">
-                    <input type="text" class="span2" id="inputLimitYear" placeholder="0" size="1"
-                           maxlength="4">
-                    (0/0/0=sin fecha limite)
+                    <div class="input-append date" id="inputDate" data-date="" data-date-format="dd-mm-yyyy">
+                        <input class="span2" size="16" type="text" value="">
+                        <span class="add-on"><i class="icon-th"></i></span>
+                    </div>
                 </div>
             </div>
             <div class="control-group">
@@ -146,6 +148,27 @@
         <button class="btn btn-primary" id="submitNewListButton">Guardar</button>
     </div>
 </div>
+<div id="shareModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Compartir Tareas</h3>
+    </div>
+    <div class="modal-body">
+        <table class="table table-hover" id="shareTable">
+            <thead>
+            <th></th>
+            <th>Tarea</th>
+            <th>Lista</th>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <input id="shareUser" type="text" placeholder="Usuario">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+        <button id="share" class="btn btn-primary">Compartir</button>
+    </div>
+</div>
 <!-- Modal -->
 <div id="newTaskModal" class="modal hide fade" tabindex="-1" role="dialog"
      aria-labelledby="newTaskModal" aria-hidden="true">
@@ -169,33 +192,12 @@
         <button class="btn btn-primary" id="submitNewTaskButton">Guardar</button>
     </div>
 </div>
-<div id="shareModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">Compartir Tareas</h3>
-    </div>
-    <div class="modal-body">
-        <table class="table table-hover" id="shareTable">
-            <thead>
-                <th></th>
-                <th>Tarea</th>
-                <th>Lista</th>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div class="modal-footer">
-        <input id="shareUser" type="text" placeholder="Usuario">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
-        <button id="share" class="btn btn-primary">Compartir</button>
-    </div>
-</div>
 <script type="text/template" id="taskRowTemplate">
     <% _.each(tasks, function(task) { %>
     <div class="box">
         <div class="task <% if (task.completed) {%>
         completed
-        <%}else{ if (new Date(task.limitDate) > new Date()){%>
+        <%}else{ if (new Date(task.limitDate).valueOf() >= (new Date().valueOf() + 86400)){%>
         incompleted
         <%} else {%>
         expired
@@ -208,7 +210,7 @@
             </div>
 
         </div>
-        <div data-placement="top" rel="tooltip" title="<%= task.limitDate %>" role="button"
+        <div data-placement="top" rel="tooltip" title="<%= new Date(task.limitDate).format('dd/mm/yy') %>" role="button"
              data-name="<%= task.name%>" class="task-desc task"
              data-toggle="modal">
             <div class="container-fluid header">
@@ -249,7 +251,7 @@
     <div class="box">
         <div class="task <% if (task.completed) {%>
         completed
-        <%}else{ if (new Date(task.limitDate) > new Date()){%>
+        <%}else{ if (new Date(task.limitDate).valueOf() >= (new Date().valueOf() + 86400)) {%>
         incompleted
         <%} else {%>
         expired
@@ -262,7 +264,7 @@
             </div>
 
         </div>
-        <div data-placement="top" rel="tooltip" title="<%= task.limitDate %>" role="button"
+        <div data-placement="top" rel="tooltip" title="<%= new Date(task.limitDate).format('dd/mm/yy') %>" role="button"
              data-name="<%= task.name%>" class="task-desc task"
              data-toggle="modal">
             <div class="container-fluid header">
@@ -285,8 +287,7 @@
         <div class="listsLinks">
             <ul class="nav nav-list">
                 <% _.each(lists, function(list) { %>
-                <li><a class="listElement" href="#"><%= list.name %><input type="checkbox" class="pull-right checkExport"/></a>
-                <li>
+                <li><a class="listElement" href="#"><%= list.name %><input type="checkbox" class="pull-right checkExport"/></a></li>
                     <% }); %>
             </ul>
         </div>
@@ -328,7 +329,7 @@
 <script type="text/javascript">
     var socket = io.connect();
     $('#share').click(function () {
-        socket.emit('newTask', {user:$('#shareUser').val(), taskList: shareTasks()});
+        socket.emit('newTask', {user:$('#shareUser').val(), taskList:shareTasks()});
     });
 
     var notifications = [];

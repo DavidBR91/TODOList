@@ -53,8 +53,9 @@ var TasksView = Backbone.View.extend({
     this.$el.append(template);
     $('[rel=tooltip]').tooltip();
     $('.task:not(.addTask)').bind("click tap touchend", function (event) {
+
       var $target = $(event.target);
-      var tasks = lists.at($('.nav-list .active').index() / 2).get('tasks');
+      var tasks = lists.at($('.nav-list .active').index()).get('tasks');
       var index = $(this).parents('.box').prevAll().length;
       var task = tasks.at(index);
       if ($target.is(".favicon")) {
@@ -69,11 +70,9 @@ var TasksView = Backbone.View.extend({
         $('#inputTitle').val(taskName);
         $('#taskOptionsLabel').text(taskName);
         $('#inputDescription').val(task.get('description'));
-        $('#inputLimitDay').val(date.getDate());
-        $('#inputLimitMonth').val(date.getMonth() + 1);
-        $('#inputLimitYear').val(date.getFullYear());
+        $('#inputDate').datepicker({language:'es', weekStart: 1});
+        $('#inputDate').datepicker('setValue', date);
         $('#inputCompleted').val(task.get('expectedDays'));
-        console.log(task.get('completed'));
         (task.get('completed')) ? $('#inputCompleted').attr('checked', true) : $('#inputCompleted').attr('checked', false);
       }
     });
