@@ -23,6 +23,7 @@ var ListsView = Backbone.View.extend({
       else {
         var list = lists.at(index);
         lastChange=['delete','list',{name: list.get('name')}];
+        showUndoMessage ("El borrado de la lista '"+list.get('name')+"' se ha completado");
         lists.remove(list);
         list.destroy({remote: !offlineMode});
         $('.listElement').first().parent().addClass('active');
