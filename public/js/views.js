@@ -29,14 +29,6 @@ var ListsView = Backbone.View.extend({
         changeList(lists.at(0).get('name'));
       }
     });
-    //console.log($(template).find('input'));
-    var inputs = $(template).find('input');
-    for (var i = 0; i < inputs.length; i++) {
-      inputs.eq(i).change(handler)
-    }
-    $(template).find('input').bind("click tap touchend", handler);
-    //template.find('input').change(handler);
-
     return this;
   }
 });

@@ -89,7 +89,7 @@ function showTasks(page) {
     tasksView.render();
 }
 
-var handler = function (event) {
+/*var handler = function (event) {
     var input = $(this);
     var parent = input.parent().parent();
     var index = parent.index();
@@ -111,7 +111,7 @@ var handler = function (event) {
             }
         }
     }
-};
+};*/
 
 var favList = new List({name:'Favoritos', tasks:new TaskList('Favoritos')});
 var firstTask = favList.get('tasks').at(0);
@@ -134,10 +134,6 @@ $(document).ready(function () {
             lists.add(favList);
             listsView = new ListsView({el:$('#listsWell'), model:lists});
             listsView.render();
-            var inputs = $('.nav-list').find('input');
-            inputs.each(function (i) {
-                inputs.eq(i).change(handler);
-            });
             user.fetch({
                 success:function (user) {
                     var default_list = user.get('settings').default_list;
@@ -209,7 +205,7 @@ $(document).ready(function () {
     });
 });
 
-var exportLists = function () {
+/*var exportLists = function () {
     var txt = '';
     for (var i = 0; i < exportList.length; i++) {
         for (var i = 0; i < exportList[i].tasks.length; i++) {
@@ -218,10 +214,32 @@ var exportLists = function () {
         txt += '- ' + exportList[i].name + ': ' + exportList[i].tasks + '\n';
     }
     window.open('data:download/plain;charset=utf-8,' + encodeURI(txt), '_blank');
-};
+};*/
+
+var exportLists = function (){
+    var checkedInputs = $('.checkExport:checked');
+    var parent;
+    var index;
+    var list;
+    var txt = '';
+    var tasksStr = '';
+    console.log(checkedInputs);
+    for(var i = 0; i < checkedInputs.length; i++){
+        parent = $(checkedInputs[i]).parent().parent();
+        index = parent.index();
+        list = lists.at(index);
+        console.log(list);
+        list.get('tasks').each( function(task){
+            console.log(task.get('name'));
+            tasksStr += '\t- ' + task.get('name') + ' : ' + task.get('description') +
+                '\n\t- Fecha de expiracion : ' + task.get('expiration_date') + '\n';
+        });
+        txt += '- ' + list.get('name') + '\n' + tasksStr + '\n';
+    }
+    window.open('data:download/plain;charset=utf-8,' + encodeURI(txt), '_blank');
+}
 
 var createTableShare = function (lists) {
-    console.log(lists);
     $("#shareTable tbody").html('');
     lists.each(function (list) {
         if (list.get('name') !== 'Favoritos') {
