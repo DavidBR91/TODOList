@@ -168,10 +168,13 @@ $(document).ready(function () {
         var listName = selectedList.get('name');
         var tasks = selectedList.get('tasks');
         var newTask = new Task({listid:selectedList.get('_id'), name:newTaskName});
-        lastChange = ['create', 'task', newTask];
-        showUndoMessage ("La creacion de la tarea '"+newTaskName+"' se ha completado");
         tasks.add(newTask);
-        newTask.save({}, {remote:!offlineMode});
+        newTask.save(null, {wait:true, remote:!offlineMode, success: function(model,response) { 
+        	newTask.set(response.data);
+        	newTask.url="/list/"+selectedList.get('_id')+"/task/"+response.data._id;
+        	lastChange = ['create', 'task', newTask];
+        	showUndoMessage ("La creacion de la tarea '"+newTaskName+"' se ha completado");
+        }});
         $("#newTaskModal").modal('hide');
       });
       $('#removeButton').on('click', function (e) {
@@ -251,17 +254,19 @@ var undoLastChange = function () {
       lists.each(function (list) {
         var tasks = list.get('tasks');
         tasks.each(function (task) {
-          if (task.get('_id') == lastChange[2].get('_id'))
-            tasks.remove(lastChange[2]);
+          if (task.get('_id') == lastChange[2].get('_id')){
+            tasks.remove(task);
+            task.destroy({remote:!offlineMode});
+          }
         });
       });
     } else {
       lists.remove(lastChange[2]);
+      lastChange[2].destroy({remote:!offlineMode});
     }
-    lastChange[2].destroy();
   } else if (lastChange[0] == 'delete') {
     if (lastChange[1] == 'list') {
-      var list = new List(lastChange[1]);
+      var list = new List(lastChange[2]);
       lists.add(list);
       list.save();
     } else {

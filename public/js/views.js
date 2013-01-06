@@ -16,7 +16,7 @@ var ListsView = Backbone.View.extend({
       changeList(list);
     });
     $('#deleteList').bind("click", function (e) {
-      var index = $('.active').index() / 2;
+      var index = $('.nav-list .active').index();
       if (index === 0) {
         alert('No se puede borrar la lista principal');
       }
