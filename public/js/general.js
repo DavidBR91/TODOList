@@ -114,7 +114,7 @@ var removeFavorites = function (task) {
 }
 $(document).ready(function () {
   lists = new Lists();
-  lists.fetch({
+  lists.fetch({wait:true,
     success:function () {
       lists.add(favList);
       listsView = new ListsView({el:$('#listsWell'), model:lists});
@@ -156,7 +156,7 @@ $(document).ready(function () {
         lastChange = ['create', 'list', newList];
         showUndoMessage("La creacion de la lista '" + newListName + "' se ha completado");
         lists.add(newList);
-        newList.save({}, {remote:!offlineMode});
+        newList.save(null, {remote:!offlineMode});
         $("#newList").modal('hide');
         changeList(newListName);
       });
@@ -179,7 +179,6 @@ $(document).ready(function () {
           showAferCreate(newTaskName);
         }});
         $("#newTaskModal").modal('hide');
-
         function showAferCreate(taskName) {
           var index = tasks.length - 1;
           var task = tasks.at(index);
@@ -193,7 +192,6 @@ $(document).ready(function () {
           $('#inputCompleted').val(task.get('expectedDays'));
           (task.get('completed')) ? $('#inputCompleted').attr('checked', true) : $('#inputCompleted').attr('checked', false);
         }
-
       });
       $('#continueEraseTask').on('click', function (e) {
 
