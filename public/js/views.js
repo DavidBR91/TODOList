@@ -29,6 +29,7 @@ var ListsView = Backbone.View.extend({
                 $('.listElement').first().parent().addClass('active');
                 changeList(lists.at(0).get('name'));
             }
+            $('#continueEraseList').modal('hide');
         });
         return this;
     }

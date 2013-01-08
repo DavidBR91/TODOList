@@ -186,7 +186,7 @@ $(document).ready(function () {
             showUndoMessage ("El borrado de la tarea '"+task.get('name')+"' se ha completado");
             tasks.remove(task);
             task.destroy({remote:!offlineMode});
-            $("#taskOptions").modal('hide');
+            $("#continueEraseTask").modal('hide');
             return false;
           }
         });
