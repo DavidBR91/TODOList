@@ -258,10 +258,10 @@
     error = options.error;
     switch (method) {
       case 'read':
-        if (localsync('hasDirtyOrDestroyed', model, options)) {
+        /*if (localsync('hasDirtyOrDestroyed', model, options)) {
           console.log("can't clear", options.storeName, "require sync dirty data first");
           return success(localsync(method, model, options));
-        } else {
+        } else {*/
           options.success = function(resp, status, xhr) {
             var i, _i, _len;
             console.log('got remote', resp, 'putting into', options.storeName);
@@ -285,7 +285,7 @@
             return success(localsync(method, model, options));
           };
           return onlineSync(method, model, options);
-        }
+        //}
         break;
       case 'create':
         options.success = function(resp, status, xhr) {
