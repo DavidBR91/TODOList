@@ -194,7 +194,6 @@ $(document).ready(function () {
         }
       });
       $('#continueEraseTask').on('click', function (e) {
-
         var tasks = lists.at($('.nav-list .active').index()).get('tasks');
         tasks.each(function (task) {
           if (task.get('name') == $('#taskOptionsLabel').text()) {
@@ -209,6 +208,22 @@ $(document).ready(function () {
       });
       $("#shareModal").on('show', function () {
         createTableShare(lists);
+      });
+      $('#continueEraseList').bind("click", function (e) {
+        var index = $('.nav-list .active').index();
+        if (index === 0) {
+            alert('No se puede borrar la lista principal');
+        }
+        else {
+            var list = lists.at(index);
+            lastChange = ['delete', 'list', {name: list.get('name')}];
+            showUndoMessage("El borrado de la lista '" + list.get('name') + "' se ha completado");
+            lists.remove(list);
+            list.destroy({remote: !offlineMode});
+            $('.listElement').first().parent().addClass('active');
+            changeList(lists.at(0).get('name'));
+        }
+        $('#eraseList').modal('hide');
       });
     }
   });
