@@ -322,9 +322,6 @@ div .comprimed ul{
     background-image: url("/img/red_light.png");
 }
 #alert-area {
-	position: absolute;
-	top: 10%;
-	left: 30%;
 	font-size: large;
 	text-align: center;
 }

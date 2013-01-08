@@ -60,10 +60,12 @@ function changeList(list) {
   });
 }
 
-function showUndoMessage (message) {
-	$("#alert-area").empty();
-    $("#alert-area").append($("<div class='alert-message alert-success fade in' data-alert><p> " + message + ". <a onclick='undoLastChange()'>Deshacer</a> </p></div>"));
-    $(".alert-message").delay(7000).fadeOut("slow", function () { $(this).remove(); });
+function showUndoMessage(message) {
+  $("#alert-area").empty();
+  $("#alert-area").append($("<div class='alert-message alert-success fade in' data-alert><p> " + message + ". <a onclick='undoLastChange()'>Deshacer</a> </p></div>"));
+  $(".alert-message").delay(10000).fadeOut("slow", function () {
+    $(this).remove();
+  });
 }
 
 function paginationHandler() {
@@ -137,7 +139,7 @@ $(document).ready(function () {
             var day = date[0], month = date[1] - 1, year = date[2];
             //task.set({name: $('#inputTitle').val(),description: $('#inputDescription').val(),expiration_date: new Date($('#inputLimitYear').val(),$('#inputLimitMonth').val()-1,$('#inputLimitDay').val(),0,0,0,0),expectedDays: $('#inputExpectedDays').val(),completed: $('#inputCompleted').attr('checked')?true:false});
             lastChange = ['update', task, {name:task.get('name'), description:task.get('description'), expiration_date:task.get('expiration_date'), expectedDays:task.get('expectedDays'), completed:task.get('completed')}];
-            showUndoMessage ("La modificacion de la tarea '"+$('#inputTitle').val()+"' se ha completado");
+            showUndoMessage("La modificacion de la tarea '" + $('#inputTitle').val() + "' se ha completado");
             task.save({name:$('#inputTitle').val(), description:$('#inputDescription').val(), expiration_date:new Date(year, month, day), expectedDays:$('#inputExpectedDays').val(), completed:($('#inputCompleted').attr('checked')) ? true : false}, {remote:!offlineMode, wait:false, success:function (model, response) {
             }});
             $("#taskOptions").modal('hide');
@@ -152,7 +154,7 @@ $(document).ready(function () {
         $('#inputListName').val('')
         var newList = new List({name:newListName, tasks:new TaskList(newListName)});
         lastChange = ['create', 'list', newList];
-        showUndoMessage ("La creacion de la lista '"+newListName+"' se ha completado");
+        showUndoMessage("La creacion de la lista '" + newListName + "' se ha completado");
         lists.add(newList);
         newList.save({}, {remote:!offlineMode});
         $("#newList").modal('hide');
@@ -169,13 +171,29 @@ $(document).ready(function () {
         var tasks = selectedList.get('tasks');
         var newTask = new Task({listid:selectedList.get('_id'), name:newTaskName});
         tasks.add(newTask);
-        newTask.save(null, {wait:true, remote:!offlineMode, success: function(model,response) { 
-        	newTask.set(response.data);
-        	newTask.url="/list/"+selectedList.get('_id')+"/task/"+response.data._id;
-        	lastChange = ['create', 'task', newTask];
-        	showUndoMessage ("La creacion de la tarea '"+newTaskName+"' se ha completado");
+        newTask.save(null, {wait:true, remote:!offlineMode, success:function (model, response) {
+          newTask.set(response.data);
+          newTask.url = "/list/" + selectedList.get('_id') + "/task/" + response.data._id;
+          lastChange = ['create', 'task', newTask];
+          showUndoMessage("La creacion de la tarea '" + newTaskName + "' se ha completado");
+          showAferCreate(newTaskName);
         }});
         $("#newTaskModal").modal('hide');
+
+        function showAferCreate(taskName) {
+          var index = tasks.length - 1;
+          var task = tasks.at(index);
+          $('#taskOptions').modal('show')
+          var date = new Date(task.get('expiration_date'));
+          $('#inputTitle').val(taskName);
+          $('#taskOptionsLabel').text(taskName);
+          $('#inputDescription').val(task.get('description'));
+          $('#inputDate').datepicker({language:'es', weekStart:1});
+          $('#inputDate').datepicker('setValue', date);
+          $('#inputCompleted').val(task.get('expectedDays'));
+          (task.get('completed')) ? $('#inputCompleted').attr('checked', true) : $('#inputCompleted').attr('checked', false);
+        }
+
       });
       $('#continueEraseTask').on('click', function (e) {
 
@@ -183,13 +201,13 @@ $(document).ready(function () {
         tasks.each(function (task) {
           if (task.get('name') == $('#taskOptionsLabel').text()) {
             lastChange = ['delete', lists.at($('.nav-list .active').index()), {name:task.get('name'), description:task.get('description'), expiration_date:task.get('expiration_date'), expectedDays:task.get('expectedDays'), completed:task.get('completed'), listid:lists.at($('.nav-list .active').index()).get('_id')}];
-            showUndoMessage ("El borrado de la tarea '"+task.get('name')+"' se ha completado");
+            showUndoMessage("El borrado de la tarea '" + task.get('name') + "' se ha completado");
             tasks.remove(task);
             task.destroy({remote:!offlineMode});
-            $("#continueEraseTask").modal('hide');
             return false;
           }
         });
+        $("#eraseTask").modal('hide');
       });
       $("#shareModal").on('show', function () {
         createTableShare(lists);
@@ -198,25 +216,25 @@ $(document).ready(function () {
   });
 });
 
-var exportLists = function (){
-    var checkedInputs = $('.checkExport:checked');
-    var parent;
-    var index;
-    var list;
-    var txt = '';
-    for(var i = 0; i < checkedInputs.length; i++){
-        parent = $(checkedInputs[i]).parent().parent();
-        index = parent.index();
-        list = lists.at(index);
-        var tasksStr = '';
-        list.get('tasks').each( function(task){
-            tasksStr += '\t- ' + task.get('name') + ' : ' + task.get('description') +
-                '\n\t\t- Fecha de expiracion : ' + task.get('expiration_date') +
-                '\n\t\t- Estado : ' + (task.get('completed') ? 'Completada ' : 'No completada') + '\n';
-        });
-        txt += '- ' + list.get('name') + '\n' + tasksStr + '\n';
-    }
-    window.open('data:download/plain;charset=utf-8,' + encodeURI(txt), '_blank');
+var exportLists = function () {
+  var checkedInputs = $('.checkExport:checked');
+  var parent;
+  var index;
+  var list;
+  var txt = '';
+  for (var i = 0; i < checkedInputs.length; i++) {
+    parent = $(checkedInputs[i]).parent().parent();
+    index = parent.index();
+    list = lists.at(index);
+    var tasksStr = '';
+    list.get('tasks').each(function (task) {
+      tasksStr += '\t- ' + task.get('name') + ' : ' + task.get('description') +
+        '\n\t\t- Fecha de expiracion : ' + task.get('expiration_date') +
+        '\n\t\t- Estado : ' + (task.get('completed') ? 'Completada ' : 'No completada') + '\n';
+    });
+    txt += '- ' + list.get('name') + '\n' + tasksStr + '\n';
+  }
+  window.open('data:download/plain;charset=utf-8,' + encodeURI(txt), '_blank');
 }
 
 var createTableShare = function (lists) {
@@ -247,7 +265,7 @@ var shareTasks = function () {
 var undoLastChange = function () {
   $("#alert-area").empty();
   if (lastChange.length == 0) return;
-  var selList=$('.nav-list .active').index() / 2;
+  var selList = $('.nav-list .active').index() / 2;
   if (lastChange[0] == 'update') {
     lastChange[1].save(lastChange[2]);
   } else if (lastChange[0] == 'create') {
@@ -255,7 +273,7 @@ var undoLastChange = function () {
       lists.each(function (list) {
         var tasks = list.get('tasks');
         tasks.each(function (task) {
-          if (task.get('_id') == lastChange[2].get('_id')){
+          if (task.get('_id') == lastChange[2].get('_id')) {
             tasks.remove(task);
             task.destroy({remote:!offlineMode});
           }
@@ -281,8 +299,8 @@ var undoLastChange = function () {
 
   listsView = new ListsView({el:$('#listsWell'), model:lists});
   listsView.render();
-  if(typeof lists.at(selList)!='undefined')
-    	changeList(lists.at(selList).get('name'));
-    else
-        changeList(lists.at(0).get('name'));
+  if (typeof lists.at(selList) != 'undefined')
+    changeList(lists.at(selList).get('name'));
+  else
+    changeList(lists.at(0).get('name'));
 };
