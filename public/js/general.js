@@ -174,7 +174,8 @@ $(document).ready(function () {
         newTask.save({}, {remote:!offlineMode});
         $("#newTaskModal").modal('hide');
       });
-      $('#removeButton').on('click', function (e) {
+      $('#continueEraseTask').on('click', function (e) {
+
         var tasks = lists.at($('.nav-list .active').index()).get('tasks');
         tasks.each(function (task) {
           if (task.get('name') == $('#taskOptionsLabel').text()) {
@@ -185,11 +186,11 @@ $(document).ready(function () {
             $("#taskOptions").modal('hide');
             return false;
           }
-        })
+        });
       });
       $("#shareModal").on('show', function () {
         createTableShare(lists);
-      })
+      });
     }
   });
 });

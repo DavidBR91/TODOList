@@ -1,3 +1,10 @@
+<div id="overlay" class="overlay invisible">
+    <div class="overlayContainer">
+        <div>
+            <p>Saliendo, por favor espere...</p>
+        </div>
+    </div>
+</div>
 <div class="index tall" id="wrap">
     <div class="tall" id="main">
         <div class="row-fluid" style="">
@@ -26,7 +33,7 @@
                                      aria-labelledby="dLabel"></div>
                             </li>
                             <li class="divider-vertical"></li>
-                            <li><a href="/logout">Logout</a></li>
+                            <li><a id="logout" href="/logout">Logout</a></li>
                             <li class="divider-vertical"></li>
                             <li><a href="/#/admin/user"><i class="icon-cog icon-white"></i>Opciones</a></li>
                         </ul>
@@ -42,7 +49,7 @@
                         <div class="container-fluid listsAddDelete">
                             <div class="row-fluid">
                                 <button href="#newList" class="btn btn-primary" data-toggle="modal">Nueva lista</button>
-                                <button id="deleteList" class="btn btn-danger">Borrar lista</button>
+                                <button href="#eraseList" id="deleteList" data-toggle="modal" class="btn btn-danger">Borrar lista</button>
                             </div>
                             </br>
                             <div class="row-fluid">
@@ -120,7 +127,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <a class="btn btn-danger pull-left" id="removeButton">Borrar Tarea</a>
+        <a href="#eraseTask" data-toggle="modal" class="btn btn-danger pull-left" id="removeButton">Borrar Tarea</a>
         <a class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</a>
         <a class="btn btn-primary" id="submitButton">Guardar cambios</a>
     </div>
@@ -190,6 +197,32 @@
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cerrar</button>
         <button class="btn btn-primary" id="submitNewTaskButton">Guardar</button>
+    </div>
+</div>
+<div id="eraseTask" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Atención</h3>
+    </div>
+    <div class="modal-body">
+        <p>Estás a punto de borrar una tarea, esta acción no se puede deshacer. ¿Deseas continuar?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+        <button id="continueEraseTask" class="btn btn-danger">Continuar</button>
+    </div>
+</div>
+<div id="eraseList" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3>Atención</h3>
+    </div>
+    <div class="modal-body">
+        <p>Estás a punto de borrar una lista, esta acción no se puede deshacer. ¿Deseas continuar?</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancelar</button>
+        <button id="continueEraseList" class="btn btn-danger">Continuar</button>
     </div>
 </div>
 <script type="text/template" id="taskRowTemplate">
@@ -395,4 +428,16 @@
             class_name:'my-sticky-class'
         });
     }
+</script>
+<script type="text/javascript">
+    $('#eraseTask').on('show', function () {
+        $('#taskOptions').modal('hide');
+    })
+</script>
+<script type="text/javascript">
+    $("#logout").on('click',function () {
+        setTimeout(function () {
+            $("#overlay").removeClass("invisible")
+        }, 2000)
+    })
 </script>
