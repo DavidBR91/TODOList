@@ -62,6 +62,9 @@ var TasksView = Backbone.View.extend({
                 (task.get('completed')) ? $('#inputCompleted').attr('checked', true) : $('#inputCompleted').attr('checked', false);
             }
         });
+      $('#newTaskButton').bind('click tap touchend', function(){
+        $('#newTaskModal').modal('show');
+      })
         return this;
     }
 });
@@ -75,6 +78,7 @@ var TasksViewFav = Backbone.View.extend({
         });
         var template = _.template($("#taskRowTemplate_Fav").html(), {tasks: taskArray});
         this.$el.append(template);
+
         $('[rel=tooltip]').tooltip();
         return this;
     }
