@@ -64,7 +64,7 @@ var TasksView = Backbone.View.extend({
         });
       $('#newTaskButton').bind('click tap touchend', function(){
         $('#newTaskModal').modal('show');
-      })
+      });
         return this;
     }
 });
