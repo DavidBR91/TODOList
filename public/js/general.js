@@ -21,6 +21,7 @@ function changeOfflineMode() {
   if (!offlineMode) {
     offlineMode = true;
     $('#status').html('<i class="status offline"/> Offline');
+    $('#buttonShare').css('display', 'none');
   } else {
     offlineMode = false;
     lists.syncDirtyAndDestroyed();
@@ -31,6 +32,7 @@ function changeOfflineMode() {
       });
     });
     $('#status').html('<i class="status online"/> Online');
+    $('#buttonShare').removeAttr('style');
   }
   return false;
 }

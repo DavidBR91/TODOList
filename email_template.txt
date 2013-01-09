@@ -1,3 +1,0 @@
-Hola {{env_username}},
-
-El usuario {{rec_username}}, ha {{acc_rej}} tu envio de tareas;

@@ -1,29 +1,37 @@
-var email = require('mailer');
+var nodemailer = require('nodemailer');
 
+// Create a SMTP transport object
+var transport = nodemailer.createTransport("SMTP", {
+  service:'Gmail', // use well known service
+  auth:{
+    user:"todolistis@gmail.com",
+    pass:"equipoa2013"
+  }
+});
+
+console.log('SMTP Configured');
 
 var sendEmail = function (to, env_username, rec_user, acc_rej) {
-  email.send({
-      host:"smtp.sendgrid.net",
-      port:"25",
-      domain:"smtp.sendgrid.net",
-      authentication:"login",
-      username:(new Buffer("fgodino")).toString("base64"),
-      password:(new Buffer("equipoa")).toString("base64"),
-      to:to,
-      from:"test@mydomain.com",
-      subject:"Notificación de envio de tareas",
-      template:"./email_template.txt", // path to template name
-      data:{
-        "rec_username":rec_user,
-        "env_username":env_username,
-        "acc_rej":acc_rej
-      }
-    },
-    function (err, result) {
-      if (err) {
-        console.log(err);
-      }
-    });
-};
+  var message = {
+    // sender info
+    from:'TODOLIST <todolistid@gmail.com>',
+    // Comma separated list of recipients
+    to:to,
+    // Subject of the message
+    subject:'Nueva notificación de usuario', //
+    // plaintext body
+    text:'Hola '+ env_username + ', \nEl usuario ' + rec_user + ' ha ' + acc_rej + ' tu envio de tareas'
+  };
+
+  console.log('Sending Mail');
+  transport.sendMail(message, function (error) {
+    if (error) {
+      console.log('Error occured');
+      console.log(error.message);
+      return;
+    }
+    console.log('Message sent successfully!');
+  });
+}
 
 exports.sendEmail = sendEmail;
