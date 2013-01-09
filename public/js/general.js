@@ -62,7 +62,7 @@ function changeList(list) {
 
 function showUndoMessage(message) {
   $("#alert-area").empty();
-  $("#alert-area").append($("<div class='alert-message alert-success fade in' data-alert><p> " + message + ". <a onclick='undoLastChange()'>Deshacer</a> </p></div>"));
+  $("#alert-area").append($("<div class='alert-message alert-success fade in' data-alert><p> " + message + ". <a href='#' onclick='undoLastChange()'>Deshacer</a> </p></div>"));
   $(".alert-message").delay(10000).fadeOut("slow", function () {
     $(this).remove();
   });
