@@ -1,17 +1,3 @@
-var Map=Backbone.Model.extend({
-	idAttribute: '_id',
-	defaults:{
-		name: '',		
-	},
-	parse: function(response) { 
-		var listCollection=[];
-		this.url='/map/'+response._id;
-	}
-});
-var MapList=Backbone.Collection.extend({
-	model: Map
-});
-
 var List=Backbone.Model.extend({
   idAttribute: '_id',
   parse: function(response) {
@@ -34,6 +20,7 @@ var List=Backbone.Model.extend({
 var Lists=Backbone.Collection.extend({
   model: List,
   url: '/list',
+
   comparator: function(list) {
     return list.name
   }
@@ -55,6 +42,11 @@ var Task=Backbone.Model.extend({
 });
 var TaskList=Backbone.Collection.extend({
   model: Task,
+  reorder : function(initPos,endPos){
+    var model = this.at(initPos);
+    this.remove(model);
+    this.add(model,{at:endPos});
+  },
   setParams: function(listid,list,user) {
     this.url='/list/'+listid+'/task';
     this.list=list;
